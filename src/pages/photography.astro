@@ -1,0 +1,626 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import ltdLogo from '../assets/247creativehub-ltd-logo.png';
+import { contact, links } from '../data/site';
+
+const services = [
+  {
+    icon: 'sparkles',
+    title: 'Event photography',
+    text: 'Natural, well-composed coverage of celebrations, corporate events, church programmes and community occasions.',
+  },
+  {
+    icon: 'portrait',
+    title: 'Portraits & lifestyle',
+    text: 'Confident individual, family and professional portraits with thoughtful direction and a polished finish.',
+  },
+  {
+    icon: 'video',
+    title: 'Event videography',
+    text: 'Purposeful video coverage that preserves the atmosphere, key moments and story of your event.',
+  },
+  {
+    icon: 'megaphone',
+    title: 'Brand content',
+    text: 'Photography and short-form video for products, services, campaigns, websites and social platforms.',
+  },
+  {
+    icon: 'sliders',
+    title: 'Photo editing',
+    text: 'Careful colour, exposure and detail enhancement that keeps images natural, consistent and ready to share.',
+  },
+  {
+    icon: 'film',
+    title: 'Video editing',
+    text: 'Clean, engaging edits with considered pacing, music, titles and delivery formats suited to your audience.',
+  },
+] as const;
+
+const steps = [
+  { n: '01', title: 'Plan', text: 'We discuss your occasion, audience, priorities, style and essential moments.' },
+  { n: '02', title: 'Create', text: 'We work unobtrusively where needed and provide clear direction when it helps.' },
+  { n: '03', title: 'Refine', text: 'Selected photographs and footage are edited for a consistent, professional finish.' },
+  { n: '04', title: 'Deliver', text: 'Your final content is prepared in practical formats for sharing, print or online use.' },
+];
+
+const fit = [
+  'Weddings & celebrations',
+  'Church & community events',
+  'Corporate events',
+  'Professional portraits',
+  'Products & small businesses',
+  'Social and campaign content',
+];
+
+const subject = '247 CreativeHub Photography or Videography Enquiry';
+---
+
+<Base
+  title="Photography & Videography in Glasgow | 247 CreativeHub Ltd UK"
+  description="Event photography, portraits, videography, brand content and editing from 247 CreativeHub Ltd UK. Based in Glasgow, working across the UK."
+  variant="creative"
+>
+  <!-- Hero -->
+  <section class="ph-hero on-dark" id="top" aria-labelledby="ph-title">
+    <div class="container ph-hero__grid">
+      <div class="ph-hero__copy">
+        <div class="ph-logo">
+          <Image src={ltdLogo} alt="247 CreativeHub Ltd UK" width={220} densities={[1, 2]} loading="eager" />
+        </div>
+        <p class="eyebrow">Photography · Videography · Visual storytelling</p>
+        <h1 id="ph-title">Moments pass. <span class="accent">Stories remain.</span></h1>
+        <p class="ph-hero__intro">
+          Professional visual content created with care, clarity and a strong understanding of the people, purpose and
+          emotion behind every brief.
+        </p>
+        <div class="ph-hero__actions">
+          <a href="#creative-contact" class="btn btn--primary">Discuss your shoot <Icon name="arrow-right" size={18} /></a>
+          <a href="#creative-services" class="btn btn--ghost">View services</a>
+        </div>
+      </div>
+
+      <div class="viewfinder" aria-hidden="true">
+        <div class="viewfinder__frame">
+          <span class="vf-corner vf-corner--tl"></span>
+          <span class="vf-corner vf-corner--tr"></span>
+          <span class="vf-corner vf-corner--bl"></span>
+          <span class="vf-corner vf-corner--br"></span>
+          <div class="vf-top">
+            <span class="vf-rec"><i></i>REC</span>
+            <span>247 / CREATIVE</span>
+          </div>
+          <div class="vf-focus"><span></span></div>
+          <div class="vf-grid"></div>
+          <div class="vf-bottom">
+            <p class="vf-title">Focus on what matters.</p>
+            <p class="vf-sub">People · Brands · Events</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Statement -->
+  <section class="ph-statement">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Glasgow · UK</p>
+      <h2 data-reveal style="--d:1">
+        More than coverage. We create visual records that feel honest, polished and worth returning to.
+      </h2>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section ph-services" id="creative-services" aria-labelledby="ph-services-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow" data-reveal>Our services</p>
+        <h2 id="ph-services-title" data-reveal style="--d:1">One creative partner. Every important frame.</h2>
+      </header>
+      <ul role="list" class="ph-grid">
+        {
+          services.map((s, i) => (
+            <li class="ph-card" data-reveal style={`--d:${i % 3}`}>
+              <span class="ph-card__icon">
+                <Icon name={s.icon} size={22} />
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section ph-process on-dark" aria-labelledby="ph-process-title">
+    <div class="container">
+      <header class="section-head">
+        <p class="eyebrow" data-reveal>The experience</p>
+        <h2 id="ph-process-title" data-reveal style="--d:1">
+          Calm planning. Confident shooting. Careful finishing.
+        </h2>
+      </header>
+      <ol role="list" class="ph-steps">
+        {
+          steps.map((s, i) => (
+            <li data-reveal style={`--d:${i}`}>
+              <span class="ph-steps__n">{s.n}</span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- Fit -->
+  <section class="section ph-fit" aria-labelledby="ph-fit-title">
+    <div class="container ph-fit__grid">
+      <div>
+        <h2 id="ph-fit-title" data-reveal>Made for real people and meaningful work.</h2>
+        <p data-reveal style="--d:1">
+          Every brief is different. We shape coverage around your priorities instead of forcing your occasion into a
+          standard template.
+        </p>
+      </div>
+      <ul role="list" class="ph-fit__list">
+        {
+          fit.map((f, i) => (
+            <li data-reveal style={`--d:${i % 3}`}>
+              <Icon name="check" size={18} strokeWidth={2} />
+              {f}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section ph-contact on-dark" id="creative-contact" aria-labelledby="ph-contact-title">
+    <div class="container ph-contact__inner">
+      <p class="eyebrow" data-reveal>Let’s create something worth remembering</p>
+      <h2 id="ph-contact-title" data-reveal style="--d:1">Tell us about your event, project or idea.</h2>
+      <div class="ph-contact__actions" data-reveal style="--d:2">
+        <a class="btn btn--primary" href={links.mailto(subject)}>
+          Send a creative enquiry <Icon name="mail" size={18} />
+        </a>
+        <a class="btn btn--ghost" href={links.whatsapp('Hello 247 CreativeHub, I’d like to ask about photography or videography.')} target="_blank" rel="noopener">
+          <Icon name="whatsapp" size={18} /> WhatsApp {contact.whatsappDisplay}
+        </a>
+      </div>
+      <p class="ph-contact__meta" data-reveal style="--d:3">
+        Based in Glasgow, taking photography and videography enquiries across the UK.
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Creative sub-brand: deeper, cinematic surfaces with the Ltd logo's royal blue */
+  :global(.theme-creative) {
+    --creative-ink: #070b14;
+    --creative-ink-2: #0e1424;
+    --creative-blue: #2b55d9;
+    --creative-blue-soft: #8fa8ff;
+  }
+
+  .ph-hero {
+    position: relative;
+    overflow: clip;
+    background:
+      radial-gradient(ellipse 60% 70% at 85% 30%, rgb(43 85 217 / 0.35), transparent 70%),
+      var(--creative-ink);
+    padding-top: calc(var(--header-h) + clamp(40px, 6vw, 80px));
+    padding-bottom: clamp(72px, 10vw, 128px);
+  }
+  .ph-hero__grid {
+    display: grid;
+    gap: clamp(48px, 6vw, 80px);
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .ph-hero__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .ph-logo {
+    display: inline-flex;
+    padding: 0.6rem 1rem;
+    border-radius: 14px;
+    background: #fff;
+    margin-bottom: 2rem;
+  }
+  .ph-logo img {
+    width: 200px;
+    height: auto;
+  }
+  .ph-hero .eyebrow,
+  .ph-process .eyebrow,
+  .ph-contact .eyebrow {
+    color: var(--creative-blue-soft);
+  }
+  .ph-hero h1 {
+    margin-top: 1.25rem;
+    font-size: var(--step-5);
+    letter-spacing: -0.045em;
+    line-height: 1;
+  }
+  .ph-hero h1 .accent,
+  .ph-contact h2 .accent,
+  .ph-process h2 .accent {
+    color: var(--creative-blue-soft);
+  }
+  .ph-hero__intro {
+    margin-top: 1.5rem;
+    max-width: 48ch;
+    font-size: var(--step-1);
+    color: var(--on-dark-2);
+  }
+  .ph-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  /* Viewfinder visual */
+  .viewfinder {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(circle at 60% 45%, rgb(143 168 255 / 0.25), transparent 55%),
+      linear-gradient(140deg, #1a2440, #0b1020 70%);
+    border: 1px solid var(--line-dark-strong);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.7);
+    overflow: hidden;
+  }
+  .viewfinder__frame {
+    position: absolute;
+    inset: 6%;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    color: rgb(255 255 255 / 0.75);
+  }
+  .vf-corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border-color: rgb(255 255 255 / 0.7);
+    border-style: solid;
+    border-width: 0;
+  }
+  .vf-corner--tl {
+    top: 0;
+    left: 0;
+    border-top-width: 2px;
+    border-left-width: 2px;
+  }
+  .vf-corner--tr {
+    top: 0;
+    right: 0;
+    border-top-width: 2px;
+    border-right-width: 2px;
+  }
+  .vf-corner--bl {
+    bottom: 0;
+    left: 0;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+  }
+  .vf-corner--br {
+    bottom: 0;
+    right: 0;
+    border-bottom-width: 2px;
+    border-right-width: 2px;
+  }
+  .vf-top {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  .vf-rec {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .vf-rec i {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    background: #ff4e55;
+    animation: blink 1.6s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0.2;
+    }
+  }
+  .vf-grid {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, transparent calc(33.33% - 0.5px), rgb(255 255 255 / 0.1) calc(33.33% - 0.5px), rgb(255 255 255 / 0.1) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px)),
+      linear-gradient(90deg, transparent calc(66.66% - 0.5px), rgb(255 255 255 / 0.1) calc(66.66% - 0.5px), rgb(255 255 255 / 0.1) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px)),
+      linear-gradient(transparent calc(33.33% - 0.5px), rgb(255 255 255 / 0.1) calc(33.33% - 0.5px), rgb(255 255 255 / 0.1) calc(33.33% + 0.5px), transparent calc(33.33% + 0.5px)),
+      linear-gradient(transparent calc(66.66% - 0.5px), rgb(255 255 255 / 0.1) calc(66.66% - 0.5px), rgb(255 255 255 / 0.1) calc(66.66% + 0.5px), transparent calc(66.66% + 0.5px));
+  }
+  .vf-focus {
+    position: absolute;
+    left: 60%;
+    top: 45%;
+    width: 84px;
+    height: 84px;
+    transform: translate(-50%, -50%);
+    border: 1.5px solid var(--yellow);
+    border-radius: 6px;
+    animation: focus 4s var(--ease-in-out) infinite;
+  }
+  .vf-focus span {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 6px;
+    height: 6px;
+    margin: -3px 0 0 -3px;
+    border-radius: 999px;
+    background: var(--yellow);
+  }
+  @keyframes focus {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(0.86);
+    }
+  }
+  .vf-bottom {
+    position: absolute;
+    left: 1.5rem;
+    bottom: 1.25rem;
+    right: 1.5rem;
+  }
+  .vf-title {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2.4vw, 1.9rem);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    color: #fff;
+  }
+  .vf-sub {
+    margin-top: 0.35rem;
+  }
+
+  /* Statement */
+  .ph-statement {
+    background: var(--cream);
+    padding-block: clamp(72px, 10vw, 128px);
+  }
+  .ph-statement .eyebrow {
+    color: var(--creative-blue);
+  }
+  .ph-statement h2 {
+    margin-top: 1.25rem;
+    max-width: 22ch;
+    font-size: var(--step-4);
+    color: var(--creative-ink);
+  }
+  .ph-statement h2 .accent,
+  .ph-services h2 .accent,
+  .ph-fit h2 .accent {
+    color: var(--creative-blue);
+  }
+
+  /* Services */
+  .ph-services {
+    background: var(--paper);
+    padding-top: 0;
+  }
+  .ph-services .eyebrow,
+  .ph-fit .eyebrow {
+    color: var(--creative-blue);
+  }
+  .ph-services .section-head h2 {
+    color: var(--creative-ink);
+  }
+  .ph-services {
+    padding-top: var(--section-y);
+  }
+  .ph-grid {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .ph-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .ph-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .ph-card {
+    position: relative;
+    padding: 1.75rem;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: var(--paper);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.4s var(--ease-out),
+      translate 0.4s var(--ease-out),
+      opacity 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+  .ph-card:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-lg);
+    translate: 0 -3px;
+  }
+  .ph-card__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: #eef2ff;
+    color: var(--creative-blue);
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  .ph-card:hover .ph-card__icon {
+    background: var(--creative-blue);
+    color: #fff;
+  }
+  .ph-card__n {
+    position: absolute;
+    top: 1.75rem;
+    right: 1.75rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .ph-card h3 {
+    margin-top: 1.5rem;
+    font-size: 1.25rem;
+    color: var(--creative-ink);
+  }
+  .ph-card p {
+    margin-top: 0.6rem;
+    color: var(--muted);
+    font-size: 0.96rem;
+  }
+
+  /* Process */
+  .ph-process {
+    background: var(--creative-ink-2);
+  }
+  .ph-steps {
+    display: grid;
+    gap: 1px;
+    background: var(--line-dark);
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .ph-steps {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .ph-steps {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .ph-steps li {
+    padding: 2rem 1.75rem;
+    background: var(--creative-ink-2);
+  }
+  .ph-steps__n {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--yellow);
+  }
+  .ph-steps h3 {
+    margin-top: 2.5rem;
+    font-size: 1.6rem;
+  }
+  .ph-steps p {
+    margin-top: 0.6rem;
+    color: var(--on-dark-2);
+    font-size: 0.96rem;
+  }
+
+  /* Fit */
+  .ph-fit {
+    background: var(--cream);
+  }
+  .ph-fit__grid {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .ph-fit__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+  }
+  .ph-fit h2 {
+    font-size: var(--step-4);
+    color: var(--creative-ink);
+  }
+  .ph-fit__grid > div > p {
+    margin-top: 1.25rem;
+    color: var(--muted);
+    font-size: var(--step-1);
+    max-width: 44ch;
+  }
+  .ph-fit__list {
+    display: grid;
+    gap: 0.6rem;
+  }
+  @media (min-width: 560px) {
+    .ph-fit__list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .ph-fit__list li {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    font-weight: 500;
+    color: var(--creative-ink);
+  }
+  .ph-fit__list :global(.icon) {
+    flex: none;
+    color: var(--creative-blue);
+  }
+
+  /* Contact */
+  .ph-contact {
+    background:
+      radial-gradient(ellipse 50% 70% at 50% 100%, rgb(43 85 217 / 0.4), transparent 70%),
+      var(--creative-ink);
+    text-align: center;
+  }
+  .ph-contact__inner {
+    display: grid;
+    justify-items: center;
+  }
+  .ph-contact h2 {
+    margin-top: 1.25rem;
+    max-width: 18ch;
+    font-size: var(--step-4);
+  }
+  .ph-contact__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+  .ph-contact__meta {
+    margin-top: 1.5rem;
+    color: var(--on-dark-3);
+    font-size: 0.92rem;
+  }
+</style>

@@ -1,0 +1,308 @@
+---
+import Icon from './Icon.astro';
+import { services } from '../data/site';
+
+const svc = Object.fromEntries(services.map((s) => [s.id, s]));
+
+const challenges = [
+  {
+    icon: 'layers',
+    title: 'Fragmented purchasing information',
+    symptom: 'Purchasing data sits across spreadsheets, systems and inboxes, and nobody trusts the totals.',
+    service: 'spend',
+  },
+  {
+    icon: 'clock',
+    title: 'Supplier performance problems',
+    symptom: 'You know some suppliers are late or short, but can’t show which ones or how often.',
+    service: 'supplier',
+  },
+  {
+    icon: 'warehouse',
+    title: 'Excessive inventory',
+    symptom: 'The shelves are full, yet the items customers want still run out.',
+    service: 'inventory',
+  },
+  {
+    icon: 'evidence',
+    title: 'Uncontrolled procurement costs',
+    symptom: 'Purchases go ahead without proper specifications, quotes or a consistent sourcing process.',
+    service: 'tender',
+  },
+  {
+    icon: 'alert',
+    title: 'Supply chain disruption',
+    symptom: 'One supplier problem could stop operations, and you wouldn’t see it coming.',
+    service: 'resilience',
+  },
+  {
+    icon: 'map',
+    title: 'Poor reporting and visibility',
+    symptom: 'By the time the report is ready, the decision has already been made.',
+    service: 'reporting',
+  },
+] as const;
+
+// Noise → signal illustration: 24 dots move from a scattered field into a ranked bar chart.
+const cols = [7, 5, 4, 3, 3, 2];
+let seed = 7;
+const rand = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+const dots: { x0: number; y0: number; x1: number; y1: number; hi: boolean }[] = [];
+cols.forEach((h, c) => {
+  for (let r = 0; r < h; r++) {
+    dots.push({
+      x0: 18 + rand() * 284,
+      y0: 18 + rand() * 150,
+      x1: 40 + c * 48,
+      y1: 168 - r * 20,
+      hi: c === 0,
+    });
+  }
+});
+---
+
+<section class="section challenges" aria-labelledby="challenges-title">
+  <div class="container challenges__grid">
+    <div class="challenges__intro">
+      <p class="eyebrow" data-reveal>Sound familiar?</p>
+      <h2 id="challenges-title" data-reveal style="--d:1">
+        Too much data. Not enough visibility. Decisions made too late.
+      </h2>
+      <p class="challenges__lede" data-reveal style="--d:2">
+        Purchasing, supplier and stock information usually lives in different places. We bring it together into
+        one picture, then agree with you what to fix first.
+      </p>
+
+      <figure class="signal" data-reveal style="--d:3" data-signal>
+        <svg viewBox="0 0 320 196" role="img" aria-labelledby="signal-desc">
+          <desc id="signal-desc">
+            Illustration: scattered data points reorganise into a ranked chart, showing fragmented information becoming
+            clear priorities.
+          </desc>
+          <line x1="16" y1="184" x2="304" y2="184" class="signal__axis"></line>
+          {
+            dots.map((d, i) => (
+              <circle
+                r="6.5"
+                class:list={['signal__dot', { 'is-hi': d.hi }]}
+                style={`--x0:${d.x0.toFixed(1)}px;--y0:${d.y0.toFixed(1)}px;--x1:${d.x1}px;--y1:${d.y1}px;--i:${i}`}
+              />
+            ))
+          }
+        </svg>
+        <figcaption>
+          <span class="signal__from">Fragmented data</span>
+          <Icon name="arrow-right" size={14} />
+          <span class="signal__to">Clear priorities</span>
+        </figcaption>
+      </figure>
+    </div>
+
+    <ol role="list" class="challenges__list">
+      {
+        challenges.map((c, i) => (
+          <li class="challenge" data-reveal style={`--d:${i % 2}`}>
+            <div class="challenge__top">
+              <span class="challenge__icon">
+                <Icon name={c.icon} size={20} />
+              </span>
+            </div>
+            <h3>{c.title}</h3>
+            <p class="challenge__symptom">{c.symptom}</p>
+            <a href={`#service-${c.service}`} class="challenge__link">
+              <span>
+                <small>How we help</small>
+                {svc[c.service].short}
+              </span>
+              <Icon name="arrow-right" size={16} />
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .challenges {
+    background: var(--cream);
+  }
+  .challenges__grid {
+    display: grid;
+    gap: clamp(48px, 6vw, 88px);
+  }
+  @media (min-width: 1024px) {
+    .challenges__grid {
+      grid-template-columns: 0.82fr 1.18fr;
+      align-items: start;
+    }
+    .challenges__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 40px);
+    }
+  }
+  .challenges__intro h2 {
+    margin-top: 1.25rem;
+    font-size: var(--step-4);
+    color: var(--navy-900);
+  }
+  .challenges__intro h2 .accent {
+    color: var(--green-700);
+  }
+  .challenges__lede {
+    margin-top: 1.5rem;
+    font-size: var(--step-1);
+    color: var(--muted);
+    max-width: 46ch;
+  }
+
+  /* Noise → signal */
+  .signal {
+    margin-top: 2.5rem;
+    padding: 1.25rem 1.25rem 1rem;
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    max-width: 440px;
+  }
+  .signal svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .signal__axis {
+    stroke: var(--line-strong);
+  }
+  .signal__dot {
+    fill: var(--navy-200);
+    transform: translate(var(--x0), var(--y0));
+    transition:
+      transform 1.4s var(--ease-in-out),
+      fill 0.6s;
+    transition-delay: calc(var(--i) * 28ms + 300ms);
+  }
+  .signal.is-visible .signal__dot {
+    transform: translate(var(--x1), var(--y1));
+    fill: var(--navy-300);
+  }
+  .signal.is-visible .signal__dot.is-hi {
+    fill: var(--green-600);
+  }
+  .no-js .signal__dot {
+    transform: translate(var(--x1), var(--y1));
+  }
+  .signal figcaption {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 0.9rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .signal__to {
+    color: var(--green-700);
+  }
+
+  /* Cards */
+  .challenges__list {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 640px) {
+    .challenges__list {
+      grid-template-columns: 1fr 1fr;
+    }
+    /* `translate` composes with the reveal `transform`, so the stagger survives it */
+    .challenge:nth-child(even) {
+      translate: 0 2.5rem;
+    }
+    .challenges__list {
+      padding-bottom: 2.5rem;
+    }
+  }
+  .challenge {
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem;
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.4s var(--ease-out),
+      opacity 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+  .challenge:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow);
+  }
+  .challenge__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+  }
+  .challenge__icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--stone-50);
+    color: var(--navy-800);
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  .challenge:hover .challenge__icon {
+    background: var(--navy-800);
+    color: var(--yellow);
+  }
+  .challenge__n {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .challenge h3 {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+    color: var(--navy-900);
+  }
+  .challenge__symptom {
+    margin-top: 0.7rem;
+    font-size: 0.95rem;
+    color: var(--muted);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .challenge__link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.88rem;
+    font-weight: 560;
+    color: var(--green-700);
+  }
+  .challenge__link small {
+    display: block;
+    margin-bottom: 0.1rem;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+  }
+  .challenge__link :global(.icon) {
+    flex: none;
+    transition: transform 0.3s var(--ease-out);
+  }
+  .challenge__link:hover :global(.icon) {
+    transform: translateX(4px);
+  }
+</style>

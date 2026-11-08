@@ -1,0 +1,282 @@
+---
+import Icon from './Icon.astro';
+import Logo from './Logo.astro';
+import { Picture } from 'astro:assets';
+import panelPhoto from '../assets/photos/onsite-review.jpeg';
+
+const expertise = [
+  'Strategic sourcing',
+  'Supplier management',
+  'Manufacturing operations',
+  'Inventory control',
+  'Data-led reporting',
+];
+
+const value = [
+  {
+    title: 'Capability without a permanent hire',
+    text: 'Experienced procurement and supply chain support, sized to what you need, without adding a full-time role.',
+  },
+  {
+    title: 'Outcome-focused',
+    text: 'Each piece of work is tied to a business priority, with a named owner and a way to measure it.',
+  },
+  {
+    title: 'Works with what you have',
+    text: 'Recommendations your team can act on, using your existing data and systems wherever possible.',
+  },
+  {
+    title: 'Yours to keep',
+    text: 'The controls, routines and reports stay with your team after we finish.',
+  },
+];
+---
+
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <div class="about__visual" data-reveal>
+      <div class="about__panel on-dark">
+        <div class="about__photo" aria-hidden="true">
+          <Picture
+            src={panelPhoto}
+            alt=""
+            formats={['avif', 'webp']}
+            widths={[600, 900, 1200]}
+            sizes="(min-width: 1024px) 520px, 94vw"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <Logo tone="light" class="about__logo" />
+        <div class="about__coords">
+          <p class="fig-note">Based in</p>
+          <p class="about__city">Glasgow, Scotland</p>
+          <p class="about__ll" aria-hidden="true">55.8642° N, 4.2518° W</p>
+        </div>
+        <div class="about__coverage">
+          <Icon name="map" size={18} />
+          <span>Supporting organisations across the UK</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="about__copy">
+      <p class="eyebrow" data-reveal>About 247CREATIVEHUB</p>
+      <h2 id="about-title" data-reveal style="--d:1">
+        Commercial thinking, operational experience and clear analysis.
+      </h2>
+      <p class="about__lede" data-reveal style="--d:2">
+        247CREATIVEHUB is a Glasgow-based supply chain solutions company supporting organisations that need experienced
+        procurement and supply chain capability without adding a permanent full-time role.
+      </p>
+      <p data-reveal style="--d:2">
+        We combine strategic sourcing, supplier management, manufacturing operations, inventory control and data-led
+        reporting. Every piece of work starts with a real operating problem and the evidence behind it, and ends
+        with changes your team can keep running.
+      </p>
+
+      <div class="about__expertise" data-reveal style="--d:3">
+        <p class="fig-note">Areas of expertise</p>
+        <ul role="list">
+          {expertise.map((e) => <li>{e}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <ul role="list" class="about__value">
+      {
+        value.map((v, i) => (
+          <li data-reveal style={`--d:${i}`}>
+            <span class="about__check">
+              <Icon name="check" size={16} strokeWidth={2} />
+            </span>
+            <h3>{v.title}</h3>
+            <p>{v.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .about {
+    background: var(--stone-50);
+  }
+  .about__grid {
+    display: grid;
+    gap: clamp(48px, 6vw, 96px);
+    align-items: center;
+  }
+  @media (min-width: 1024px) {
+    .about__grid {
+      grid-template-columns: 0.9fr 1.1fr;
+    }
+  }
+
+  /* Visual */
+  .about__visual {
+    position: relative;
+  }
+  .about__panel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    min-height: 460px;
+    padding: clamp(1.75rem, 3vw, 2.5rem);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(160deg, var(--navy-800), var(--navy-950));
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+  }
+  .about__photo {
+    position: absolute;
+    inset: 0;
+  }
+  .about__photo :global(picture),
+  .about__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .about__photo :global(img) {
+    object-fit: cover;
+    object-position: center 30%;
+    transform: scale(1.04);
+    transition: transform 1.6s var(--ease-out);
+  }
+  .about__panel:hover .about__photo :global(img) {
+    transform: scale(1.09);
+  }
+  /* Navy tint, heavier at top and bottom where the text sits */
+  .about__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(3 26 72 / 0.92) 0%, rgb(3 26 72 / 0.55) 42%, rgb(2 12 36 / 0.92) 100%);
+  }
+  .about__panel :global(.about__logo) {
+    position: relative;
+  }
+  .about__coords {
+    position: relative;
+  }
+  .about__city {
+    font-family: var(--font-display);
+    margin-top: 0.5rem;
+    font-size: var(--step-3);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+  }
+  .about__ll {
+    margin-top: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--on-dark-3);
+  }
+  .about__coverage {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    align-self: flex-start;
+    padding: 0.6rem 0.9rem;
+    border-radius: 999px;
+    border: 1px solid var(--line-dark-strong);
+    font-size: 0.88rem;
+    color: var(--on-dark-2);
+  }
+  .about__coverage :global(.icon) {
+    color: var(--green-400);
+  }
+
+  /* Copy */
+  .about__copy h2 {
+    margin-top: 1.25rem;
+    font-size: var(--step-4);
+    color: var(--navy-900);
+  }
+  .about__copy h2 .accent {
+    color: var(--green-700);
+  }
+  .about__copy > p:not(.eyebrow) {
+    margin-top: 1.25rem;
+    color: var(--muted);
+    max-width: 60ch;
+  }
+  .about__copy > .about__lede {
+    font-size: var(--step-1);
+    color: var(--ink-2);
+    margin-top: 1.75rem;
+  }
+  .about__expertise {
+    margin-top: 2.25rem;
+  }
+  .about__expertise ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.85rem;
+  }
+  .about__expertise li {
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--navy-800);
+  }
+
+  /* Value */
+  .about__value {
+    display: grid;
+    gap: 1px;
+    margin-top: clamp(56px, 7vw, 96px);
+    background: var(--stone-200);
+    border: 1px solid var(--stone-200);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .about__value {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1080px) {
+    .about__value {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .about__value li {
+    padding: 1.75rem;
+    background: var(--stone-50);
+  }
+  .about__check {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 999px;
+    background: var(--green-600);
+    color: #fff;
+    margin-bottom: 1.25rem;
+  }
+  .about__value h3 {
+    font-size: 1.08rem;
+    letter-spacing: -0.02em;
+    color: var(--navy-900);
+  }
+  .about__value p {
+    margin-top: 0.5rem;
+    font-size: 0.93rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+</style>

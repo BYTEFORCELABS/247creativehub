@@ -1,0 +1,239 @@
+---
+/**
+ * Light footer with an edge-to-edge wordmark. The letters rise into place when the
+ * footer scrolls into view, and each one lifts under the cursor.
+ */
+import Icon from './Icon.astro';
+import { contact, links, services } from '../data/site';
+
+const year = new Date().getFullYear();
+const word = '247CREATIVEHUB'.split('');
+---
+
+<footer class="footer" data-footer>
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__intro">
+        <p class="footer__tagline">Turn supply chain pressure into practical progress.</p>
+        <a href="/#contact" class="btn btn--navy footer__cta">
+          Start a conversation <Icon name="arrow-right" size={18} />
+        </a>
+      </div>
+
+      <nav class="footer__col" aria-label="Services">
+        <h2>Services</h2>
+        <ul role="list">
+          {services.map((s) => <li><a href={`/#service-${s.id}`}>{s.title}</a></li>)}
+        </ul>
+      </nav>
+
+      <nav class="footer__col" aria-label="Company">
+        <h2>Company</h2>
+        <ul role="list">
+          <li><a href="/#approach">How we work</a></li>
+          <li><a href="/#industries">Industries</a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/photography">Photography &amp; Video</a></li>
+        </ul>
+      </nav>
+
+      <div class="footer__col">
+        <h2>Contact</h2>
+        <ul role="list">
+          <li><a href={links.mailto()}>{contact.email}</a></li>
+          <li><a href={links.whatsapp()} target="_blank" rel="noopener">WhatsApp {contact.whatsappDisplay}</a></li>
+          <li><span>{contact.location}</span></li>
+          <li><span>Working across the UK</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <p class="footer__giant" aria-hidden="true">
+      {
+        word.map((ch, i) => (
+          <span class:list={['g', { 'g--num': i < 3 }]} style={`--i:${i}`}>
+            {ch}
+          </span>
+        ))
+      }
+    </p>
+  </div>
+
+  <div class="footer__bar">
+    <div class="container footer__bar-inner">
+      <p>© {year} 247CREATIVEHUB</p>
+      <nav aria-label="Legal">
+        <a href="/privacy">Privacy notice</a>
+        <a href="#top" class="footer__top-link">Back to top <Icon name="arrow-right" size={15} class="up" /></a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--paper);
+    color: var(--ink);
+    padding-top: clamp(64px, 8vw, 104px);
+    overflow: clip;
+  }
+
+  /* ---- Top: tagline + link columns ---- */
+  .footer__top {
+    display: grid;
+    gap: 2.5rem 2rem;
+    grid-template-columns: 1fr;
+  }
+  @media (min-width: 640px) {
+    .footer__top {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .footer__intro {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (min-width: 1080px) {
+    .footer__top {
+      grid-template-columns: 1.5fr 1.1fr 0.8fr 1fr;
+      gap: 3rem;
+    }
+    .footer__intro {
+      grid-column: auto;
+    }
+  }
+  .footer__tagline {
+    max-width: 16ch;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.2rem + 1.4vw, 2.3rem);
+    font-weight: 560;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+    color: var(--navy-900);
+  }
+  .footer__cta {
+    margin-top: 1.75rem;
+  }
+  .footer__col h2 {
+    font-family: var(--font-sans);
+    font-size: 0.92rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--muted);
+    margin-bottom: 1.25rem;
+  }
+  .footer__col ul {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .footer__col a,
+  .footer__col span {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: var(--ink);
+    word-break: break-word;
+  }
+  .footer__col a {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition:
+      background-size 0.35s var(--ease-out),
+      color 0.2s;
+  }
+  .footer__col a:hover {
+    color: var(--navy-800);
+    background-size: 100% 1px;
+  }
+
+  /* ---- Giant wordmark ---- */
+  .footer__giant {
+    container-type: inline-size;
+    margin-top: clamp(56px, 8vw, 104px);
+    line-height: 0.8;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .g {
+    display: inline-block;
+    /* "247CREATIVEHUB" is 7.6× its font size wide in Urbanist 700, so 13cqw fills the row */
+    font-size: 13cqw;
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.045em;
+    color: var(--navy-900);
+    transition:
+      transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3),
+      color 0.3s;
+  }
+  .g--num {
+    color: var(--green-600);
+  }
+  .g:hover {
+    transform: translateY(-0.14em);
+    color: var(--navy-700);
+  }
+  .g--num:hover {
+    color: var(--green-500);
+  }
+  /* Letters rise into place, staggered, when the footer comes into view */
+  :global(.js) .footer:not(.is-in) .g {
+    transform: translateY(0.9em);
+    opacity: 0;
+  }
+  :global(.js) .footer.is-in .g {
+    transition:
+      transform 1.1s var(--ease-out) calc(var(--i) * 45ms),
+      opacity 0.8s var(--ease-out) calc(var(--i) * 45ms),
+      color 0.3s;
+  }
+  :global(.js) .footer.is-in .g:hover {
+    transition:
+      transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3),
+      color 0.3s;
+  }
+
+  /* ---- Bottom bar ---- */
+  .footer__bar {
+    margin-top: clamp(24px, 3vw, 40px);
+    border-top: 1px solid var(--line);
+  }
+  .footer__bar-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1.75rem;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .footer__bar nav {
+    display: flex;
+    gap: 1.75rem;
+  }
+  .footer__bar a {
+    color: var(--ink-2);
+    transition: color 0.2s;
+  }
+  .footer__bar a:hover {
+    color: var(--navy-800);
+  }
+  .footer__top-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .footer__top-link :global(.up) {
+    transform: rotate(-90deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .footer:not(.is-in) .g {
+      transform: none;
+      opacity: 1;
+    }
+  }
+</style>

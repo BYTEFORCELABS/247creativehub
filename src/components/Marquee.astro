@@ -1,0 +1,85 @@
+---
+/** Decorative ticker of the six services. Speeds up with scroll velocity (see scripts/motion.ts). */
+import { services } from '../data/site';
+const items = services.map((s) => s.short);
+---
+
+<div class="marquee" aria-hidden="true" data-marquee>
+  <div class="marquee__track">
+    {
+      [0, 1].map(() => (
+        <div class="marquee__group">
+          {items.map((t, i) => (
+            <>
+              <span class:list={['marquee__item', { 'is-outline': i % 2 === 1 }]}>{t}</span>
+              <svg class="marquee__mark" viewBox="0 0 44 44" width="36" height="36">
+                <circle cx="22" cy="22" r="14.5" fill="none" stroke-width="2.4" />
+                <circle cx="22" cy="7.5" r="4.4" />
+                <circle cx="36.5" cy="22" r="4.4" />
+                <circle cx="22" cy="36.5" r="4.4" />
+                <circle cx="7.5" cy="22" r="4.4" />
+              </svg>
+            </>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .marquee {
+    overflow: hidden;
+    padding-block: clamp(40px, 6vw, 72px) clamp(8px, 2vw, 16px);
+    background: var(--cream);
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 48s linear infinite;
+  }
+  .marquee__group {
+    display: flex;
+    align-items: center;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    padding-right: clamp(1.25rem, 3vw, 2.5rem);
+  }
+  .marquee__item {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 1.2rem + 4.4vw, 5.2rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--navy-900);
+  }
+  .marquee__item.is-outline {
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--navy-800);
+  }
+  .marquee__mark {
+    flex: none;
+    width: clamp(24px, 3vw, 36px);
+    height: auto;
+  }
+  .marquee__mark circle:first-child {
+    stroke: var(--green-600);
+  }
+  .marquee__mark circle:not(:first-child) {
+    fill: var(--yellow);
+    stroke: var(--cream);
+    stroke-width: 2.4;
+  }
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

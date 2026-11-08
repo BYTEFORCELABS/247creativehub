@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Base title="Page not found | 247CREATIVEHUB" description="The page you were looking for could not be found." noindex>
+  <section class="nf on-dark">
+    <div class="container">
+      <p class="eyebrow">404</p>
+      <h1>This route has a missing link.</h1>
+      <p>The page you were looking for has moved or doesn’t exist.</p>
+      <div class="nf__actions">
+        <a href="/" class="btn btn--primary">Back to home <Icon name="arrow-right" size={18} /></a>
+        <a href="/#contact" class="btn btn--ghost">Contact us</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 80vh;
+    display: grid;
+    align-items: center;
+    background: linear-gradient(180deg, var(--navy-900), var(--navy-800));
+    padding-block: calc(var(--header-h) + 64px) 96px;
+  }
+  .nf h1 {
+    margin-top: 1.25rem;
+    font-size: var(--step-5);
+    max-width: 14ch;
+  }
+  .nf h1 .accent {
+    color: var(--green-300);
+  }
+  .nf p:not(.eyebrow) {
+    margin-top: 1.25rem;
+    color: var(--on-dark-2);
+    font-size: var(--step-1);
+  }
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+</style>
