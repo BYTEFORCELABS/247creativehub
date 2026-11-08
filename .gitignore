@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.astro/
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+
+# Audio dropped into public/ by accident: never publish it (the repo is public)
+public/images/*.mp3
