@@ -251,7 +251,23 @@ const mode = endpoint ? 'endpoint' : 'mailto';
     display: block;
     margin-top: 0.1rem;
     font-weight: 560;
-    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  @media (max-width: 400px) {
+    .channel {
+      gap: 0.75rem;
+      padding: 0.8rem 0.85rem;
+    }
+    .channel__icon {
+      width: 36px;
+      height: 36px;
+    }
+    .channel strong {
+      font-size: 0.95rem;
+    }
+    .channel :global(.channel__go) {
+      display: none;
+    }
   }
   .channel :global(.channel__go) {
     color: var(--on-dark-3);

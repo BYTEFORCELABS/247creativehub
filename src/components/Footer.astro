@@ -127,6 +127,22 @@ const word = '247CREATIVEHUB'.split('');
     display: grid;
     gap: 0.75rem;
   }
+  /* Taller tap targets on touch screens without changing the visual rhythm much */
+  @media (pointer: coarse) {
+    .footer__col ul {
+      gap: 0.15rem;
+    }
+    .footer__col a,
+    .footer__col span {
+      display: inline-block;
+      padding-block: 0.6rem;
+    }
+    .footer__bar a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
+    }
+  }
   .footer__col a,
   .footer__col span {
     font-size: 0.98rem;

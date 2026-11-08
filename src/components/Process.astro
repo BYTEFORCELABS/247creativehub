@@ -109,6 +109,15 @@ import sessionPhoto from '../assets/photos/working-session.jpeg';
     font-size: 0.95rem;
     color: var(--ink-2);
   }
+  @media (max-width: 719px) {
+    .process__photo figcaption {
+      position: static;
+      margin-top: 0.75rem;
+      box-shadow: none;
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+  }
   .process__chip {
     padding: 0.3rem 0.7rem;
     border-radius: 999px;
@@ -173,6 +182,22 @@ import sessionPhoto from '../assets/photos/working-session.jpeg';
   }
   .step {
     position: relative;
+  }
+  @media (max-width: 400px) {
+    .steps {
+      padding-left: 52px;
+    }
+    .steps__track {
+      left: 19px;
+    }
+    .step__node {
+      left: -52px;
+      width: 40px;
+      height: 40px;
+    }
+    .step__card {
+      padding: 1.25rem;
+    }
   }
   .step__node {
     position: absolute;

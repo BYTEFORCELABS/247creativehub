@@ -103,7 +103,7 @@ The previous site was generated with ChatGPT's site builder (Vinext: Vite + Reac
 | --- | --- | --- |
 | Mobile navigation | Desktop nav only, with no menu on small screens | Accessible full-screen menu with focus trap and Escape to close |
 | Contact | Only mailto and WhatsApp links | Validated enquiry form with a real submission path (see above) |
-| Typography | Arial / system fonts | Self-hosted Urbanist (headings), Figtree (body), Instrument Serif (accent) and Geist Mono (chart labels) |
+| Typography | Arial / system fonts | Self-hosted Urbanist (headings), Figtree (body) and Geist Mono (chart labels) |
 | Services | Numbered text cards | Individual illustrations, expandable "What's included", and CTAs that pre-select the service in the form |
 | Outcomes | Four short text items | Illustrative before/after visuals, clearly labelled as not client data |
 | Process | Static list | Timeline that fills as you scroll (horizontal on desktop, vertical on mobile) |

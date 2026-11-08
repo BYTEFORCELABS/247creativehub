@@ -51,7 +51,6 @@
   --font-display: 'Urbanist Variable', 'Figtree Variable', ui-sans-serif, system-ui, sans-serif;
   --font-sans: 'Figtree Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'Geist Mono Variable', ui-monospace, 'SFMono-Regular', Menlo, monospace;
-  --font-serif: 'Instrument Serif', 'Iowan Old Style', Georgia, serif;
 
   --step--1: 0.875rem;
   --step-0: 1.0625rem;
@@ -230,12 +229,10 @@ p {
   color: var(--green-300);
 }
 
-/* Serif italic accent inside headings */
+/* Colour accent inside headings: same typeface as the heading, only the colour changes */
 .accent {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.01em;
+  font: inherit;
+  letter-spacing: inherit;
 }
 
 /* Section header pattern */
@@ -413,6 +410,15 @@ p {
 }
 .text-link:hover {
   background-size: 100% 1px;
+}
+/* Invisible padding so short text links are easy to tap on phones (44px target) */
+.text-link {
+  position: relative;
+}
+.text-link::after {
+  content: '';
+  position: absolute;
+  inset: -9px -4px;
 }
 .text-link .icon {
   transition: transform 0.3s var(--ease-out);
