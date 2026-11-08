@@ -63,7 +63,7 @@ All motion lives in `src/scripts/motion.ts`, plus a few CSS animations. Every ef
 | Hero headline rising word by word | Split at build time, pure CSS (no wait for JavaScript) |
 | Section headings rising word by word | Split in the browser, Web Animations API |
 | Hero parallax as you scroll away | CSS scroll-driven animation (`animation-timeline`) |
-| Ring tilting toward the cursor, magnetic buttons | Pointer tracking with CSS spring-style transitions |
+| Magnetic buttons | Pointer tracking with CSS spring-style transitions |
 | Green spotlight following the cursor on cards | CSS radial gradient driven by pointer position |
 | Service-name marquee that speeds up as you scroll | CSS animation, playback rate tied to Lenis scroll velocity |
 | Blur-in reveals, page-to-page fades | CSS transitions and native View Transitions |
@@ -75,12 +75,12 @@ Photos live in `src/assets/photos/`, not `public/`, so Astro can turn each one i
 
 | Where | File |
 | --- | --- |
-| Hero background (navy duotone, behind the data visual) | `warehouse-lead` |
+| Hero background (full colour under a navy wash, with the lens card bottom-right) | `factory-floor` |
 | Industries cards | `workshop-review`, `retail-stockroom`, `logistics-dispatch`, `wholesale-warehouse`, `care-supplies`, `bid-review` |
 | How a project runs (scroll-revealed) | `working-session` |
-| Full-width parallax band | `factory-floor` |
+| Full-width parallax band | `inventory-scan` (1253px wide: a higher-resolution copy would look sharper on large screens) |
 | About panel background | `onsite-review` |
-| Not used yet | `inventory-scan`, `planning-meeting`, `small-meeting` (too small at 275×183) |
+| Not used yet | `warehouse-lead`, `planning-meeting`, `small-meeting` (too small at 275×183) |
 
 To swap a photo, replace the file and keep the name, or change the `import` at the top of the component. Group photos are only used where they can read as a working session with a client's team. None of them suggest the people shown are 247CREATIVEHUB staff.
 

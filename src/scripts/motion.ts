@@ -1,6 +1,6 @@
 /**
  * Motion layer: smooth scroll (Lenis), split-text headings, magnetic buttons,
- * cursor spotlights, hero tilt and a velocity-reactive marquee. Uses the browser's
+ * cursor spotlights and a velocity-reactive marquee. Uses the browser's
  * native Web Animations API; the hero parallax is a CSS scroll-driven animation.
  * Everything is skipped when the visitor prefers reduced motion.
  */
@@ -86,25 +86,6 @@ function initSplitHeadings() {
   });
 }
 
-/* ------------------------------------------------------------- Hero depth */
-function initHero() {
-  const hero = document.querySelector<HTMLElement>('.hero');
-  if (!hero || reduce) return;
-  const stage = hero.querySelector<HTMLElement>('.intel__stage');
-  // (Scroll-out parallax is CSS: see `animation-timeline` in Hero.astro.)
-
-  // Cursor tilt on the ring (eased by a CSS transition on `transform`)
-  if (stage && finePointer) {
-    hero.addEventListener('pointermove', (e) => {
-      const r = stage.getBoundingClientRect();
-      const dx = (e.clientX - (r.left + r.width / 2)) / window.innerWidth;
-      const dy = (e.clientY - (r.top + r.height / 2)) / window.innerHeight;
-      stage.style.transform = `rotateY(${(dx * 14).toFixed(2)}deg) rotateX(${(-dy * 14).toFixed(2)}deg)`;
-    });
-    hero.addEventListener('pointerleave', () => (stage.style.transform = ''));
-  }
-}
-
 /* -------------------------------------------------------- Magnetic buttons */
 function initMagnetic() {
   if (reduce || !finePointer) return;
@@ -163,7 +144,6 @@ function initMarquee() {
 export function initMotion() {
   initLenis();
   initSplitHeadings();
-  initHero();
   initMagnetic();
   initSpotlight();
   initMarquee();

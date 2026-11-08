@@ -146,7 +146,9 @@ function initReveal() {
         }
       });
     },
-    { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+    // Fire as soon as an element enters the view (just above the bottom edge), so content
+    // peeking in at the fold never sits there invisible waiting for a scroll.
+    { threshold: 0, rootMargin: '0px 0px -2% 0px' },
   );
   items.forEach((el) => io.observe(el));
 }
@@ -176,17 +178,10 @@ function initIntel() {
   if (!root) return;
   const tabs = $$<HTMLButtonElement>('[role="tab"]', root);
   const panels = $$('[data-panel]', root);
-  const spokes = $$<SVGGElement>('[data-spoke]', root);
-  const arc = $<SVGGElement>('.ring-arc-wrap', root);
   let current = 0;
-  let rotation = 0;
   let userTookOver = false;
 
   const select = (index: number, focus = false) => {
-    const prevAngle = Number(tabs[current].dataset.angle);
-    const nextAngle = Number(tabs[index].dataset.angle);
-    // Always rotate forward (clockwise) by the shortest positive step
-    rotation += ((nextAngle - prevAngle) % 360 + 360) % 360;
     current = index;
     const id = tabs[index].dataset.lens;
     tabs.forEach((t, i) => {
@@ -195,8 +190,6 @@ function initIntel() {
       t.tabIndex = on ? 0 : -1;
     });
     panels.forEach((p) => (p.hidden = p.dataset.panel !== id));
-    spokes.forEach((s) => s.classList.toggle('is-active', s.dataset.spoke === id));
-    arc?.style.setProperty('--angle', String(rotation));
     if (focus) tabs[index].focus();
   };
 
