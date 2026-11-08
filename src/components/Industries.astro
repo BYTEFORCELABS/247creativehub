@@ -1,0 +1,272 @@
+---
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import manufacturing from '../assets/photos/workshop-review.jpeg';
+import retail from '../assets/photos/retail-stockroom.jpeg';
+import logistics from '../assets/photos/logistics-dispatch.png';
+import wholesale from '../assets/photos/wholesale-warehouse.webp';
+import care from '../assets/photos/care-supplies.jpeg';
+import publicSector from '../assets/photos/bid-review.jpeg';
+
+const industries = [
+  {
+    icon: 'factory',
+    name: 'Manufacturing',
+    image: manufacturing,
+    alt: 'Two colleagues reviewing figures on a tablet in a manufacturing workshop',
+    pos: 'center 40%',
+    line: 'Keeping materials flowing and production on plan.',
+    focus: ['Material and component availability', 'Supplier lead times and OTIF', 'Raw, WIP and finished-goods stock'],
+  },
+  {
+    icon: 'shirt',
+    name: 'Retail & Clothing',
+    image: retail,
+    alt: 'A stockroom worker scanning folded clothing on warehouse shelving',
+    pos: 'center 45%',
+    line: 'The right stock, at the right time and cost.',
+    focus: ['Supplier delivery against season dates', 'Excess and slow-moving lines', 'Consistent buying prices'],
+  },
+  {
+    icon: 'truck',
+    name: 'Logistics',
+    image: logistics,
+    alt: 'A warehouse operative with a clipboard checking stock among loaded racking',
+    pos: 'center 35%',
+    line: 'Controlling the cost of keeping things moving.',
+    focus: ['Carrier and subcontractor spend', 'Fleet and consumables purchasing', 'Service performance reporting'],
+  },
+  {
+    icon: 'warehouse',
+    name: 'Wholesale',
+    image: wholesale,
+    alt: 'Two managers reviewing a tablet in a large warehouse of palletised stock',
+    pos: 'center 40%',
+    line: 'Margin depends on buying well and turning stock.',
+    focus: ['Supplier terms and price variance', 'Stock turn and availability', 'Supplier and range rationalisation'],
+  },
+  {
+    icon: 'care',
+    name: 'Care & Services',
+    image: care,
+    alt: 'A care worker restocking shelves of medical supplies',
+    pos: 'center 35%',
+    line: 'Essential supplies that can’t be allowed to run out.',
+    focus: ['Consumables and contract spend', 'Continuity of critical supplies', 'Simple, workable purchasing controls'],
+  },
+  {
+    icon: 'landmark',
+    name: 'Public-sector suppliers',
+    image: publicSector,
+    alt: 'A team reviewing documents around a meeting table',
+    pos: 'center 35%',
+    line: 'Winning, then delivering, public contracts.',
+    focus: ['Tender submission support', 'Evidence of supply chain capability', 'Contract performance reporting'],
+  },
+] as const;
+---
+
+<section class="section industries" id="industries" aria-labelledby="industries-title">
+  <div class="container">
+    <header class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>Who we support</p>
+        <h2 id="industries-title" data-reveal style="--d:1">Industries we work with.</h2>
+      </div>
+      <p data-reveal style="--d:2">
+        Every sector feels supply chain pressure in a different place. These are the areas where we usually start.
+      </p>
+    </header>
+
+    <ul role="list" class="ind__grid">
+      {
+        industries.map((ind, i) => (
+          <li class="ind" data-reveal style={`--d:${i % 3}`}>
+            <div class="ind__media">
+              <Picture
+                src={ind.image}
+                alt={ind.alt}
+                formats={['avif', 'webp']}
+                widths={[420, 640, 900]}
+                sizes="(min-width: 1024px) 400px, (min-width: 640px) 50vw, 100vw"
+                style={`object-position:${ind.pos}`}
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+            <span class="ind__icon">
+              <Icon name={ind.icon} size={22} strokeWidth={1.6} />
+            </span>
+            <div class="ind__body">
+              <h3>{ind.name}</h3>
+              <p class="ind__line">{ind.line}</p>
+              <p class="ind__label">Where we typically help</p>
+              <ul role="list" class="ind__focus">
+                {ind.focus.map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .industries {
+    background: var(--paper);
+  }
+  .industries .section-head h2 {
+    color: var(--navy-900);
+  }
+  .industries .section-head h2 .accent {
+    color: var(--green-700);
+  }
+  /* 1px gaps over a line-coloured background draw the dividers without clipping at the corners */
+  .ind__grid {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .ind__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .ind__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .ind {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: var(--paper);
+    isolation: isolate;
+    transition:
+      color 0.4s,
+      opacity 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+  .ind::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--navy-800);
+    clip-path: inset(100% 0 0 0);
+    transition: clip-path 0.55s var(--ease-out);
+  }
+  .ind:hover::before {
+    clip-path: inset(0 0 0 0);
+  }
+  .ind:hover {
+    color: #fff;
+  }
+  .ind__media {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--stone-100);
+  }
+  .ind__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.02);
+    transition: transform 1.2s var(--ease-out);
+  }
+  .ind:hover .ind__media :global(img) {
+    transform: scale(1.08);
+  }
+  .ind__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 55%, rgb(3 26 72 / 0.35));
+    pointer-events: none;
+  }
+  .ind__body {
+    padding: 1.9rem clamp(1.5rem, 2.6vw, 2.25rem) clamp(1.5rem, 2.6vw, 2.25rem);
+  }
+  .ind__icon {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    margin: -26px 0 0 clamp(1.5rem, 2.6vw, 2.25rem);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--navy-800);
+    box-shadow: var(--shadow);
+    transition:
+      background-color 0.4s,
+      color 0.4s;
+  }
+  .ind:hover .ind__icon {
+    background: var(--navy-800);
+    color: var(--yellow);
+  }
+  .ind h3 {
+    font-size: 1.35rem;
+    letter-spacing: -0.025em;
+    color: var(--navy-900);
+    transition: color 0.4s;
+  }
+  .ind__line {
+    margin-top: 0.4rem;
+    color: var(--muted);
+    font-size: 0.97rem;
+    transition: color 0.4s;
+  }
+  .ind__label {
+    margin-top: 1.4rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--green-700);
+    transition: color 0.4s;
+  }
+  .ind__focus {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 0.7rem;
+  }
+  .ind__focus li {
+    position: relative;
+    padding-left: 1rem;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+    transition: color 0.4s;
+  }
+  .ind__focus li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 5px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--green-600);
+  }
+  .ind:hover h3,
+  .ind:hover .ind__focus li {
+    color: #fff;
+  }
+  .ind:hover .ind__line {
+    color: var(--on-dark-2);
+  }
+  .ind:hover .ind__label {
+    color: var(--green-300);
+  }
+  .ind:hover .ind__focus li::before {
+    background: var(--yellow);
+  }
+</style>

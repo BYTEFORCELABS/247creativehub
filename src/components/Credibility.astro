@@ -1,0 +1,117 @@
+---
+import Icon from './Icon.astro';
+
+const pillars = [
+  {
+    icon: 'map',
+    title: 'UK-wide support',
+    text: 'Based in Glasgow, supporting organisations across the UK.',
+  },
+  {
+    icon: 'users',
+    title: 'SME-focused',
+    text: 'Experienced capability without adding a permanent full-time role.',
+  },
+  {
+    icon: 'evidence',
+    title: 'Evidence-led',
+    text: 'Recommendations built on your own purchasing, supplier and stock data.',
+  },
+  {
+    icon: 'layers',
+    title: 'Procurement & supply chain expertise',
+    text: 'Sourcing, supplier management, operations, inventory and reporting.',
+  },
+] as const;
+---
+
+<section class="cred" aria-label="Why businesses work with 247CREATIVEHUB">
+  <div class="container">
+    <ul role="list" class="cred__card">
+      {
+        pillars.map((p, i) => (
+          <li class="cred__item" data-reveal style={`--d:${i}`}>
+            <span class="cred__icon">
+              <Icon name={p.icon} size={22} />
+            </span>
+            <h2>{p.title}</h2>
+            <p>{p.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .cred {
+    position: relative;
+    z-index: 2;
+    margin-top: calc(clamp(72px, 9vw, 110px) * -1);
+  }
+  .cred__card {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--line);
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .cred__card {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1080px) {
+    .cred__card {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .cred__item {
+    position: relative;
+    padding: clamp(1.5rem, 2.4vw, 2.1rem);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 640px) {
+    .cred__item:nth-child(odd) {
+      border-right: 1px solid var(--line);
+    }
+    .cred__item:nth-last-child(-n + 2) {
+      border-bottom: 0;
+    }
+  }
+  @media (min-width: 1080px) {
+    .cred__item {
+      border-bottom: 0;
+      border-right: 1px solid var(--line);
+    }
+    .cred__item:last-child {
+      border-right: 0;
+    }
+  }
+  .cred__item:last-child {
+    border-bottom: 0;
+  }
+  .cred__icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--stone-50);
+    color: var(--green-700);
+    margin-bottom: 1.25rem;
+  }
+  .cred__item h2 {
+    font-size: 1.06rem;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+  }
+  .cred__item p {
+    margin-top: 0.5rem;
+    font-size: 0.93rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+</style>

@@ -1,0 +1,245 @@
+---
+import Icon from './Icon.astro';
+import ServiceArt from './ServiceArt.astro';
+import { services } from '../data/site';
+---
+
+<section class="section services" id="services" aria-labelledby="services-title">
+  <div class="container">
+    <header class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>What we do</p>
+        <h2 id="services-title" data-reveal style="--d:1">Six services. Use one, or combine them.</h2>
+      </div>
+      <p data-reveal style="--d:2">
+        Start with a focused health check on one problem area, or combine services into an improvement programme
+        built around your priorities.
+      </p>
+    </header>
+
+    <ul role="list" class="services__grid">
+      {
+        services.map((s, i) => (
+          <li class="svc" id={`service-${s.id}`} data-reveal style={`--d:${i % 3}`}>
+            <div class="svc__art">
+              <ServiceArt id={s.id} />
+            </div>
+            <div class="svc__body">
+              <h3>{s.title}</h3>
+              <p class="svc__summary">{s.summary}</p>
+
+              <details class="svc__more">
+                <summary>
+                  What’s included
+                  <span class="svc__plus" aria-hidden="true">
+                    <Icon name="plus" size={16} />
+                  </span>
+                </summary>
+                <ul role="list">
+                  {s.includes.map((item) => (
+                    <li>
+                      <Icon name="check" size={16} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+
+              <a href="#contact" class="svc__cta" data-service-link={s.id}>
+                Discuss {s.short.toLowerCase()}
+                <Icon name="arrow-right" size={16} />
+              </a>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="services__note" data-reveal>
+      <p>
+        <strong>Not sure which one you need?</strong> Tell us what’s going wrong and we’ll suggest where to start.
+        Most work begins with a short conversation.
+      </p>
+      <a href="#contact" class="btn btn--navy">Talk it through <Icon name="arrow-right" size={18} /></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .services {
+    background: var(--paper);
+  }
+  .services__grid {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 700px) {
+    .services__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1080px) {
+    .services__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .svc {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    background: var(--paper);
+    overflow: hidden;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+    transition:
+      border-color 0.3s,
+      box-shadow 0.45s var(--ease-out),
+      translate 0.45s var(--ease-out),
+      opacity 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+  .svc:hover {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow-lg);
+    translate: 0 -4px;
+  }
+  .svc:target {
+    border-color: var(--green-600);
+    box-shadow: 0 0 0 3px rgb(39 155 72 / 0.15);
+  }
+  .svc__art {
+    height: 168px;
+    padding: 1.5rem 1.75rem 1.25rem;
+    background-color: var(--stone-50);
+    background-image: radial-gradient(rgb(6 35 95 / 0.08) 1px, transparent 1px);
+    background-size: 14px 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .svc__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1.6rem 1.75rem 1.5rem;
+  }
+  .svc__n {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--green-700);
+  }
+  .svc h3 {
+    margin-top: 0.6rem;
+    font-size: 1.32rem;
+    letter-spacing: -0.025em;
+    color: var(--navy-900);
+  }
+  .svc__summary {
+    margin-top: 0.7rem;
+    color: var(--muted);
+    font-size: 0.97rem;
+    line-height: 1.6;
+  }
+  .svc__more {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    flex: 1;
+  }
+  .svc__more summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.9rem 0;
+    font-size: 0.9rem;
+    font-weight: 560;
+    color: var(--ink-2);
+    cursor: pointer;
+    list-style: none;
+  }
+  .svc__more summary::-webkit-details-marker {
+    display: none;
+  }
+  .svc__plus {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    transition:
+      transform 0.35s var(--ease-out),
+      background-color 0.2s;
+  }
+  .svc__more[open] .svc__plus {
+    transform: rotate(45deg);
+    background: var(--stone-50);
+  }
+  .svc__more ul {
+    display: grid;
+    gap: 0.55rem;
+    padding-bottom: 1rem;
+    animation: open 0.4s var(--ease-out);
+  }
+  .svc__more li {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+  .svc__more li :global(.icon) {
+    flex: none;
+    margin-top: 0.15rem;
+    color: var(--green-600);
+  }
+  @keyframes open {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+  }
+  .svc__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.85rem 1rem;
+    margin-top: 0.25rem;
+    border-radius: 12px;
+    background: var(--stone-50);
+    font-size: 0.9rem;
+    font-weight: 560;
+    color: var(--navy-800);
+    transition:
+      background-color 0.25s,
+      color 0.25s;
+  }
+  .svc__cta :global(.icon) {
+    transition: transform 0.3s var(--ease-out);
+  }
+  .svc__cta:hover {
+    background: var(--navy-800);
+    color: #fff;
+  }
+  .svc__cta:hover :global(.icon) {
+    transform: translateX(3px);
+  }
+
+  .services__note {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.25rem 2rem;
+    margin-top: 2rem;
+    padding: 1.5rem 1.75rem;
+    border-radius: var(--radius-lg);
+    background: var(--stone-50);
+    border: 1px solid var(--line);
+  }
+  .services__note p {
+    max-width: 62ch;
+    color: var(--ink-2);
+  }
+  .services__note strong {
+    color: var(--navy-900);
+  }
+</style>

@@ -1,0 +1,251 @@
+---
+import Icon from './Icon.astro';
+import HeroVisual from './HeroVisual.astro';
+import { Picture } from 'astro:assets';
+import heroPhoto from '../assets/photos/factory-floor.jpeg';
+
+// Split at build time so the word-by-word entrance is pure CSS (no JS, no layout shift).
+const plain = 'Turn supply chain pressure into'.split(' ');
+const accent = 'practical progress.'.split(' ');
+---
+
+<section class="hero on-dark" id="top" aria-labelledby="hero-title">
+  <div class="hero__bg" aria-hidden="true">
+    <div class="hero__photo">
+      <Picture
+        src={heroPhoto}
+        alt=""
+        formats={['avif', 'webp']}
+        widths={[800, 1280, 1920, 2120]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+      />
+    </div>
+  </div>
+
+  <div class="container hero__inner">
+    <div class="hero__copy">
+      <p class="eyebrow hero__eyebrow" data-enter>Procurement and supply chain consultancy</p>
+      <h1 id="hero-title" class="hero__title">
+        {plain.map((w, i) => <><span class="w"><span class="w-i" style={`--wi:${i}`}>{w}</span></span>{' '}</>)}
+        <span class="accent">
+          {accent.map((w, i) => <><span class="w"><span class="w-i" style={`--wi:${plain.length + i}`}>{w}</span></span>{i < accent.length - 1 ? ' ' : ''}</>)}
+        </span>
+      </h1>
+      <p class="hero__intro" data-enter style="--d:2">
+        We help UK SMEs understand their spend, improve supplier delivery, control inventory and build more
+        resilient supply chains, using straightforward analysis and actions your team can sustain.
+      </p>
+      <div class="hero__actions" data-enter style="--d:3">
+        <a href="#contact" class="btn btn--primary">
+          Discuss your challenge <Icon name="arrow-right" size={18} />
+        </a>
+        <a href="#services" class="btn btn--ghost">Explore our services</a>
+      </div>
+      <p class="hero__meta" data-enter style="--d:4">
+        <Icon name="map-pin" size={16} /> Based in Glasgow, working with businesses across the UK
+      </p>
+    </div>
+
+    <div class="hero__visual" data-enter style="--d:2">
+      <HeroVisual />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: clip;
+    background: var(--navy-900);
+    padding-top: calc(var(--header-h) + clamp(40px, 6vw, 72px));
+    padding-bottom: clamp(120px, 14vw, 180px);
+  }
+  @media (min-width: 1120px) {
+    .hero {
+      min-height: min(100svh, 980px);
+    }
+  }
+  .hero__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  /* Full-colour photo under a navy wash: heavy behind the copy, light on the right */
+  .hero__photo {
+    position: absolute;
+    inset: 0;
+  }
+  .hero__photo :global(picture),
+  .hero__photo :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .hero__photo :global(img) {
+    object-fit: cover;
+    object-position: 60% 30%;
+  }
+  /* Phones and tablets: the copy sits over the photo, so the wash is heavier and vertical */
+  .hero__photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgb(3 26 72 / 0.5) 0%, rgb(3 26 72 / 0.62) 35%, rgb(3 26 72 / 0.88) 70%, var(--navy-900) 100%);
+  }
+  /* Phones/tablets: keep the photo's faces in the top band, behind the headline */
+  @media (max-width: 1119px) {
+    .hero__photo {
+      bottom: auto;
+      height: min(100%, 110vw);
+    }
+    .hero__photo :global(img) {
+      object-position: 58% 20%;
+    }
+    .hero__title {
+      text-shadow: 0 2px 24px rgb(2 12 36 / 0.45);
+    }
+  }
+  /* Wide screens: heavy behind the copy on the left, light over the people on the right */
+  @media (min-width: 1120px) {
+    .hero__photo::after {
+      background:
+        linear-gradient(90deg, rgb(2 12 36 / 0.92) 0%, rgb(3 26 72 / 0.74) 38%, rgb(3 26 72 / 0.18) 72%, rgb(3 26 72 / 0.1) 100%),
+        linear-gradient(0deg, rgb(2 12 36 / 0.8) 0%, transparent 42%);
+    }
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(40px, 6vw, 64px);
+    align-items: center;
+  }
+  @media (min-width: 1120px) {
+    .hero__inner {
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: clamp(40px, 5vw, 80px);
+    }
+    /* The card sits low and right, over their hands and the tablet, leaving faces clear */
+    .hero__visual {
+      align-self: end;
+      justify-self: end;
+      width: 100%;
+      max-width: 440px;
+      margin-bottom: -3rem;
+    }
+    /* Keep the card short so it never covers faces in the photo */
+    .hero__visual :global(.lens__insight) {
+      display: none;
+    }
+    .hero__visual :global(.hbars) {
+      gap: 0.3rem;
+    }
+    .hero__visual :global(.lens__q) {
+      margin-bottom: 0.75rem;
+    }
+  }
+  .hero__eyebrow {
+    margin-bottom: 1.75rem;
+  }
+  .hero__title {
+    font-size: var(--step-5);
+    line-height: 1.01;
+    letter-spacing: -0.045em;
+    font-weight: 600;
+    max-width: 13ch;
+  }
+  .hero__title .accent {
+    color: var(--green-300);
+  }
+  .hero__intro {
+    margin-top: 1.75rem;
+    max-width: 52ch;
+    font-size: var(--step-1);
+    line-height: 1.6;
+    color: var(--on-dark-2);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+  .hero__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 2.25rem;
+    font-size: 0.9rem;
+    color: var(--on-dark-3);
+  }
+  .hero__meta :global(.icon) {
+    color: var(--green-400);
+  }
+  /* Word-by-word headline rise, masked per word */
+  .hero__title .w {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: top;
+    padding: 0 0.04em 0.12em;
+    margin: 0 -0.04em -0.12em;
+  }
+  .hero__title .w-i {
+    display: inline-block;
+    animation: wordUp 1.1s var(--ease-out) both;
+    animation-delay: calc(var(--wi) * 70ms + 120ms);
+  }
+  @keyframes wordUp {
+    from {
+      transform: translateY(108%) rotate(4deg);
+    }
+  }
+  /* CSS-only entrance: no JS dependency, so the hero always paints */
+  [data-enter] {
+    animation: enter 1s var(--ease-out) both;
+    animation-delay: calc(var(--d, 0) * 110ms + 80ms);
+  }
+  @keyframes enter {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+  }
+  /* Scroll-out parallax: copy and visual drift at different speeds as the hero leaves.
+     Native scroll-driven animation; browsers without support simply don't parallax. */
+  @supports (animation-timeline: scroll()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .hero__copy {
+        animation: heroCopyOut linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 85vh;
+      }
+      .hero :global(.intel) {
+        animation: heroVisualOut linear both;
+        animation-timeline: scroll(root);
+        animation-range: 0 85vh;
+      }
+    }
+  }
+  @keyframes heroCopyOut {
+    to {
+      transform: translateY(-70px);
+      opacity: 0.15;
+    }
+  }
+  @keyframes heroVisualOut {
+    to {
+      transform: translateY(-150px);
+    }
+  }
+  @media (max-width: 480px) {
+    .hero__actions .btn {
+      flex: 1 1 100%;
+    }
+  }
+</style>

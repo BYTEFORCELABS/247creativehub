@@ -1,0 +1,97 @@
+---
+/**
+ * Vector lockup based on the existing 247CREATIVEHUB logo: a ring with four
+ * connected nodes (in the original: freight, people, air and global supply)
+ * around "247", followed by the wordmark.
+ */
+interface Props {
+  tone?: 'light' | 'dark';
+  class?: string;
+  showWordmark?: boolean;
+}
+const { tone = 'light', class: className, showWordmark = true } = Astro.props;
+---
+
+<span class:list={['logo', `logo--${tone}`, className]}>
+  <svg class="logo__mark" viewBox="0 0 44 44" width="40" height="40" aria-hidden="true" focusable="false">
+    <circle cx="22" cy="22" r="14.5" fill="none" class="logo__ring" stroke-width="2.2"></circle>
+    <g class="logo__nodes">
+      <circle cx="22" cy="7.5" r="4.4"></circle>
+      <circle cx="36.5" cy="22" r="4.4"></circle>
+      <circle cx="22" cy="36.5" r="4.4"></circle>
+      <circle cx="7.5" cy="22" r="4.4"></circle>
+    </g>
+    <text x="22" y="25.6" text-anchor="middle" class="logo__num">247</text>
+  </svg>
+  {
+    showWordmark && (
+      <span class="logo__word">
+        <b>247</b>CREATIVEHUB
+      </span>
+    )
+  }
+</span>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    line-height: 1;
+  }
+  .logo__mark {
+    flex: none;
+    overflow: visible;
+  }
+  .logo__ring {
+    stroke: var(--green-500);
+  }
+  .logo__nodes circle {
+    fill: var(--yellow);
+    stroke-width: 2.2;
+  }
+  .logo--light .logo__nodes circle {
+    stroke: var(--navy-900);
+  }
+  .logo--dark .logo__nodes circle {
+    stroke: var(--paper);
+  }
+  .logo__num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 10.5px;
+    letter-spacing: -0.04em;
+  }
+  .logo--light .logo__num {
+    fill: #fff;
+  }
+  .logo--dark .logo__num {
+    fill: var(--navy-800);
+  }
+  .logo--dark .logo__ring {
+    stroke: var(--green-600);
+  }
+  .logo__word {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.02rem;
+    letter-spacing: 0.06em;
+  }
+  .logo__word b {
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin-right: 0.08em;
+  }
+  .logo--light .logo__word {
+    color: #fff;
+  }
+  .logo--light .logo__word b {
+    color: var(--yellow);
+  }
+  .logo--dark .logo__word {
+    color: var(--navy-800);
+  }
+  .logo--dark .logo__word b {
+    color: var(--green-700);
+  }
+</style>

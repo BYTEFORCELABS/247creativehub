@@ -1,0 +1,127 @@
+---
+import Base from '../layouts/Base.astro';
+import { contact, links } from '../data/site';
+const formService = !!(import.meta.env.PUBLIC_FORM_ENDPOINT || '').trim();
+---
+
+<Base
+  title="Privacy notice | 247CREATIVEHUB"
+  description="How 247CREATIVEHUB uses the personal information you share when you make an enquiry."
+>
+  <section class="page-hero on-dark">
+    <div class="container">
+      <p class="eyebrow">Privacy</p>
+      <h1>Privacy notice</h1>
+      <p>How we use the information you share when you contact us.</p>
+    </div>
+  </section>
+
+  <article class="section prose-wrap">
+    <div class="container prose">
+      <h2>Who we are</h2>
+      <p>
+        247CREATIVEHUB is based in {contact.location}. For any question about this notice or your information, email
+        <a href={links.mailto('Privacy question')}>{contact.email}</a>.
+      </p>
+
+      <h2>What we collect</h2>
+      <p>
+        When you send an enquiry using the form, by email or by WhatsApp, we receive the details you choose to give us.
+        This is usually your name, email address, company name, the area of support you’re interested in and your
+        message.
+      </p>
+
+      <h2>How we use it</h2>
+      <p>
+        We use your information only to respond to your enquiry and, if you choose to work with us, to discuss and
+        deliver that work. We do not sell your information or use it for unrelated marketing.
+      </p>
+      <p>
+        Our lawful basis is our legitimate interest in responding to enquiries, or taking steps at your request before
+        entering into a contract.
+      </p>
+
+      <h2>Services involved</h2>
+      <ul>
+        {
+          formService && (
+            <li>
+              Enquiries sent through the website form are delivered to us by a third-party form service, which processes
+              them on our behalf.
+            </li>
+          )
+        }
+        <li>Messages sent by WhatsApp are also subject to WhatsApp’s own privacy policy.</li>
+        <li>This website does not use advertising or analytics cookies, and fonts are served from this website.</li>
+      </ul>
+
+      <h2>How long we keep it</h2>
+      <p>We keep enquiry information only for as long as needed to handle your enquiry and any work that follows.</p>
+
+      <h2>Your rights</h2>
+      <p>
+        You can ask to see, correct or delete the information we hold about you, or object to how we use it, by emailing
+        <a href={links.mailto('Privacy request')}>{contact.email}</a>. If you are unhappy with how we handle your
+        information, you can complain to the Information Commissioner’s Office at
+        <a href="https://ico.org.uk" rel="noopener">ico.org.uk</a>.
+      </p>
+
+      <p class="prose__updated">Last updated: November 2026</p>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .page-hero {
+    background: linear-gradient(180deg, var(--navy-900), var(--navy-800));
+    padding-top: calc(var(--header-h) + clamp(48px, 7vw, 96px));
+    padding-bottom: clamp(48px, 7vw, 88px);
+  }
+  .page-hero h1 {
+    margin-top: 1.25rem;
+    font-size: var(--step-4);
+  }
+  .page-hero p:not(.eyebrow) {
+    margin-top: 1rem;
+    color: var(--on-dark-2);
+    font-size: var(--step-1);
+  }
+  .prose-wrap {
+    padding-block: clamp(56px, 8vw, 96px);
+  }
+  .prose {
+    max-width: calc(720px + 2 * var(--gutter));
+  }
+  .prose h2 {
+    margin: 2.5rem 0 0.75rem;
+    font-size: var(--step-2);
+    color: var(--navy-900);
+  }
+  .prose h2:first-child {
+    margin-top: 0;
+  }
+  .prose p,
+  .prose li {
+    color: var(--ink-2);
+  }
+  .prose p + p {
+    margin-top: 1rem;
+  }
+  .prose ul {
+    display: grid;
+    gap: 0.5rem;
+    padding-left: 1.2rem;
+  }
+  .prose a {
+    color: var(--navy-800);
+    font-weight: 560;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose__updated {
+    margin-top: 3rem !important;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted) !important;
+  }
+</style>

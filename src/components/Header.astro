@@ -1,0 +1,390 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { nav, services } from '../data/site';
+
+interface Props {
+  variant?: 'consultancy' | 'creative';
+}
+const { variant = 'consultancy' } = Astro.props;
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header class="site-header on-dark" data-header>
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__brand">
+      <Logo tone="light" />
+    </a>
+
+    <nav class="site-nav" aria-label="Primary">
+      <ul role="list" class="site-nav__list">
+        {
+          nav.map((item) =>
+            'hasMenu' in item && item.hasMenu ? (
+              <li class="site-nav__item has-menu" data-menu>
+                <a href={item.href} class="site-nav__link">
+                  {item.label}
+                </a>
+                <button
+                  class="site-nav__toggle"
+                  type="button"
+                  aria-expanded="false"
+                  aria-controls="services-menu"
+                  data-menu-toggle
+                >
+                  <span class="visually-hidden">Show services</span>
+                  <Icon name="chevron-down" size={16} />
+                </button>
+                <div class="menu" id="services-menu" data-menu-panel>
+                  <div class="menu__inner">
+                    <p class="menu__label">Six ways we help</p>
+                    <ul role="list" class="menu__grid">
+                      {services.map((s) => (
+                        <li>
+                          <a href={`/#service-${s.id}`} class="menu__link">
+                            <span>
+                              <strong>{s.title}</strong>
+                              <small>{s.tagline}</small>
+                            </span>
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </li>
+            ) : (
+              <li class="site-nav__item">
+                <a
+                  href={item.href}
+                  class="site-nav__link"
+                  aria-current={path === item.href ? 'page' : undefined}
+                >
+                  {item.label}
+                </a>
+              </li>
+            ),
+          )
+        }
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <a href={variant === 'creative' ? '#creative-contact' : '/#contact'} class="btn btn--primary btn--sm site-header__cta">
+        {variant === 'creative' ? 'Book an enquiry' : 'Start a conversation'}
+      </a>
+      <button
+        class="burger"
+        type="button"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+        data-burger
+      >
+        <span class="visually-hidden" data-burger-label>Open menu</span>
+        <span class="burger__lines" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-nav" id="mobile-nav" data-mobile-nav data-lenis-prevent hidden>
+    <nav class="container mobile-nav__inner" aria-label="Mobile">
+      <ul role="list" class="mobile-nav__list">
+        {
+          nav.map((item, i) => (
+            <li style={`--i:${i}`}>
+              <a href={item.href} data-mobile-link>
+                {item.label}
+                <Icon name="arrow-right" size={20} />
+              </a>
+            </li>
+          ))
+        }
+        <li style={`--i:${nav.length}`}>
+          <a href="/#contact" data-mobile-link>
+            Contact
+            <Icon name="arrow-right" size={20} />
+          </a>
+        </li>
+      </ul>
+      <div class="mobile-nav__foot">
+        <a href="/#contact" class="btn btn--primary" data-mobile-link>
+          Start a conversation <Icon name="arrow-right" size={18} />
+        </a>
+        <p>Based in Glasgow. Working across the UK.</p>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    height: var(--header-h);
+    transition:
+      background-color 0.4s var(--ease-out),
+      border-color 0.4s var(--ease-out),
+      transform 0.45s var(--ease-out);
+    border-bottom: 1px solid transparent;
+  }
+  .site-header.is-scrolled {
+    background: rgb(3 20 58 / 0.82);
+    -webkit-backdrop-filter: saturate(160%) blur(16px);
+    backdrop-filter: saturate(160%) blur(16px);
+    border-bottom-color: var(--line-dark);
+  }
+  .site-header.is-hidden:not(.menu-open) {
+    transform: translateY(-100%);
+  }
+  .site-header.menu-open {
+    background: var(--navy-950);
+  }
+  .site-header__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+  .site-header__brand {
+    position: relative;
+    z-index: 2;
+    border-radius: 6px;
+  }
+
+  .site-nav {
+    display: none;
+  }
+  @media (min-width: 1080px) {
+    .site-nav {
+      display: block;
+    }
+  }
+  .site-nav__list {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .site-nav__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .site-nav__link {
+    display: inline-flex;
+    padding: 0.6rem 0.85rem;
+    font-size: 0.94rem;
+    font-weight: 500;
+    color: var(--on-dark-2);
+    border-radius: 999px;
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+  .has-menu .site-nav__link {
+    padding-right: 0.2rem;
+  }
+  .site-nav__link:hover,
+  .site-nav__link[aria-current='page'] {
+    color: #fff;
+  }
+  .site-nav__toggle {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    margin-right: 0.4rem;
+    border: 0;
+    background: none;
+    color: var(--on-dark-2);
+    border-radius: 999px;
+  }
+  .site-nav__toggle :global(.icon) {
+    transition: transform 0.3s var(--ease-out);
+  }
+  .has-menu.is-open .site-nav__toggle :global(.icon) {
+    transform: rotate(180deg);
+  }
+
+  /* Dropdown */
+  .menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    width: min(660px, 90vw);
+    transform: translate(-50%, 8px);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 0.25s var(--ease-out),
+      transform 0.3s var(--ease-out),
+      visibility 0s 0.3s;
+  }
+  .menu::before {
+    content: '';
+    position: absolute;
+    inset: -16px 0 auto;
+    height: 16px;
+  }
+  .has-menu.is-open .menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+    transition:
+      opacity 0.25s var(--ease-out),
+      transform 0.3s var(--ease-out),
+      visibility 0s;
+  }
+  .menu__inner {
+    padding: 1.25rem;
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--line);
+  }
+  .menu__label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--muted);
+    padding: 0.25rem 0.75rem 0.75rem;
+  }
+  .menu__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+  }
+  .menu__link {
+    display: flex;
+    gap: 0.85rem;
+    padding: 0.8rem 0.75rem;
+    border-radius: var(--radius-sm);
+    transition: background-color 0.2s;
+  }
+  .menu__link:hover,
+  .menu__link:focus-visible {
+    background: var(--stone-50);
+  }
+  .menu__n {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--green-700);
+    padding-top: 0.2rem;
+  }
+  .menu__link strong {
+    display: block;
+    font-size: 0.93rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .menu__link small {
+    display: block;
+    margin-top: 0.2rem;
+    font-size: 0.8rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .site-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 2;
+  }
+  .site-header__cta {
+    display: none;
+  }
+  @media (min-width: 640px) {
+    .site-header__cta {
+      display: inline-flex;
+    }
+  }
+
+  /* Burger */
+  .burger {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 999px;
+    border: 1px solid var(--line-dark-strong);
+    background: transparent;
+  }
+  .burger__lines {
+    display: grid;
+    gap: 6px;
+    width: 18px;
+  }
+  .burger__lines i {
+    display: block;
+    height: 1.6px;
+    background: #fff;
+    border-radius: 2px;
+    transition: transform 0.35s var(--ease-out);
+  }
+  .burger[aria-expanded='true'] .burger__lines i:first-child {
+    transform: translateY(3.8px) rotate(45deg);
+  }
+  .burger[aria-expanded='true'] .burger__lines i:last-child {
+    transform: translateY(-3.8px) rotate(-45deg);
+  }
+  @media (min-width: 1080px) {
+    .burger {
+      display: none;
+    }
+  }
+
+  /* Mobile nav */
+  .mobile-nav {
+    position: fixed;
+    inset: var(--header-h) 0 0;
+    background: var(--navy-950);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  .mobile-nav[hidden] {
+    display: none;
+  }
+  .mobile-nav__inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100%;
+    padding-block: 1.5rem 2rem;
+  }
+  .mobile-nav__list li {
+    border-bottom: 1px solid var(--line-dark);
+    animation: navIn 0.5s var(--ease-out) both;
+    animation-delay: calc(var(--i) * 45ms + 60ms);
+  }
+  .mobile-nav__list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.1rem 0;
+    font-size: 1.6rem;
+    font-weight: 500;
+    letter-spacing: -0.025em;
+  }
+  .mobile-nav__list :global(.icon) {
+    color: var(--on-dark-3);
+  }
+  .mobile-nav__foot {
+    display: grid;
+    gap: 1rem;
+    margin-top: 2rem;
+  }
+  .mobile-nav__foot p {
+    font-size: 0.9rem;
+    color: var(--on-dark-3);
+  }
+  @keyframes navIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+</style>

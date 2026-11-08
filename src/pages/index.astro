@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Credibility from '../components/Credibility.astro';
+import Marquee from '../components/Marquee.astro';
+import PhotoBand from '../components/PhotoBand.astro';
+import Challenges from '../components/Challenges.astro';
+import Services from '../components/Services.astro';
+import Outcomes from '../components/Outcomes.astro';
+import Process from '../components/Process.astro';
+import Industries from '../components/Industries.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import { contact, services } from '../data/site';
+
+const url = new URL('/', Astro.site).toString();
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': `${url}#business`,
+  name: '247CREATIVEHUB',
+  url,
+  logo: new URL('/apple-touch-icon.png', Astro.site).toString(),
+  image: new URL('/og-image.png', Astro.site).toString(),
+  description:
+    'Glasgow-based procurement and supply chain consultancy supporting UK SMEs with spend analysis, supplier performance, inventory optimisation, resilience, tender support and reporting.',
+  email: contact.email,
+  telephone: `+${contact.whatsappIntl}`,
+  address: { '@type': 'PostalAddress', addressLocality: 'Glasgow', addressRegion: 'Scotland', addressCountry: 'GB' },
+  areaServed: { '@type': 'Country', name: 'United Kingdom' },
+  knowsAbout: ['Procurement', 'Supply chain management', 'Spend analysis', 'Inventory optimisation', 'Supplier performance'],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Procurement and supply chain services',
+    itemListElement: services.map((s) => ({
+      '@type': 'Offer',
+      itemOffered: { '@type': 'Service', name: s.title, description: s.summary },
+    })),
+  },
+};
+---
+
+<Base
+  title="247CREATIVEHUB | Procurement & Supply Chain Consultancy for UK SMEs"
+  description="Glasgow-based procurement and supply chain consultancy helping UK SMEs reduce avoidable cost, improve supplier delivery, release working capital and make risk visible."
+  jsonLd={jsonLd}
+>
+  <Hero />
+  <Credibility />
+  <Marquee />
+  <Challenges />
+  <Services />
+  <PhotoBand />
+  <Outcomes />
+  <Process />
+  <Industries />
+  <About />
+  <Contact />
+</Base>

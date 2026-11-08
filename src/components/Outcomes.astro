@@ -1,0 +1,528 @@
+---
+/**
+ * Four outcomes, each with an illustrative before/after visual.
+ * All numbers are illustrative examples, never client results. Labelled as such in the UI.
+ */
+import Icon from './Icon.astro';
+
+// 1. Cost: unit price paid for the same item across five orders (£)
+const priceBefore = [4.6, 3.1, 3.85, 2.9, 4.2];
+const priceAfter = [3.05, 2.95, 3.0, 2.95, 3.0];
+const priceMax = 5;
+
+// 2. Reliability: supplier OTIF % over 12 months
+const otifBefore = [78, 72, 81, 69, 76, 84, 71, 79, 74, 82, 77, 80];
+const otifAfter = [80, 83, 85, 88, 87, 90, 91, 93, 92, 94, 95, 96];
+const W = 300,
+  H = 120,
+  yMin = 60,
+  yMax = 100;
+const px = (i: number) => 6 + (i / 11) * (W - 12);
+const py = (v: number) => H - ((v - yMin) / (yMax - yMin)) * H;
+const pts = (arr: number[]) => arr.map((v, i) => `${px(i).toFixed(1)},${py(v).toFixed(1)}`).join(' ');
+
+// 3. Working capital: inventory value split (%)
+const stockBefore = { healthy: 58, slow: 24, excess: 18 };
+const stockAfter = { healthy: 76, slow: 16, excess: 8 };
+
+// 4. Risk: seven suppliers, unknown → placed on a likelihood × impact grid (% positions)
+const riskDots = [
+  { ax: 83, ay: 17, hi: true },
+  { ax: 50, ay: 17, hi: true },
+  { ax: 83, ay: 50, hi: true },
+  { ax: 17, ay: 17 },
+  { ax: 50, ay: 83 },
+  { ax: 17, ay: 50 },
+  { ax: 17, ay: 83 },
+];
+---
+
+<section class="section outcomes on-dark" aria-labelledby="outcomes-title" data-outcomes data-state="after">
+  <div class="outcomes__bg" aria-hidden="true"></div>
+  <div class="container outcomes__grid">
+    <div class="outcomes__intro">
+      <p class="eyebrow" data-reveal>What changes</p>
+      <h2 id="outcomes-title" data-reveal style="--d:1">
+        From reactive firefighting to controlled performance.
+      </h2>
+      <p class="outcomes__lede" data-reveal style="--d:2">
+        Our work leaves you with better information, clearer ownership and repeatable ways of managing suppliers, stock
+        and cost.
+      </p>
+
+      <div class="toggle" role="group" aria-label="Show the illustrative example" data-reveal style="--d:3">
+        <button type="button" class="toggle__btn" aria-pressed="false" data-state-btn="before">Before</button>
+        <button type="button" class="toggle__btn" aria-pressed="true" data-state-btn="after">After</button>
+        <span class="toggle__thumb" aria-hidden="true"></span>
+      </div>
+      <p class="outcomes__disclaimer" data-reveal style="--d:3">
+        <Icon name="alert" size={15} />
+        <span>Illustrative examples showing the kind of change we work towards. They are not client results.</span>
+      </p>
+
+      <a href="#contact" class="text-link outcomes__cta" data-reveal style="--d:4">
+        Arrange an initial conversation <Icon name="arrow-right" size={16} />
+      </a>
+    </div>
+
+    <ol role="list" class="outcomes__cards">
+      <!-- 1. Cost -->
+      <li class="oc" data-reveal>
+        <div class="oc__head">
+          <h3>Reduce avoidable cost</h3>
+          <p>See price variance, fragmented spend and negotiation opportunities.</p>
+        </div>
+        <figure class="oc__fig">
+          <figcaption class="fig-note">Unit price paid, same item, five orders</figcaption>
+          <div class="cols" role="img" aria-label="Illustrative example. Before: prices range from £2.90 to £4.60. After: £2.95 to £3.05.">
+            {
+              priceBefore.map((b, i) => (
+                <span class="cols__bar" style={`--b:${(b / priceMax) * 100}%;--a:${(priceAfter[i] / priceMax) * 100}%`} />
+              ))
+            }
+          </div>
+          <p class="oc__stat">
+            <span class="is-before">£2.90 to £4.60 per unit</span>
+            <span class="is-after">£2.95 to £3.05 per unit</span>
+          </p>
+        </figure>
+      </li>
+
+      <!-- 2. Reliability -->
+      <li class="oc" data-reveal style="--d:1">
+        <div class="oc__head">
+          <h3>Improve delivery reliability</h3>
+          <p>Measure supplier OTIF and address late or incomplete orders.</p>
+        </div>
+        <figure class="oc__fig">
+          <figcaption class="fig-note">Supplier OTIF %, 12 months</figcaption>
+          <svg class="line" viewBox={`0 -8 ${W} ${H + 16}`} role="img" aria-label="Illustrative example. Before: on-time-in-full fluctuates between 69% and 84%. After: it climbs steadily to 96%, above a 95% target.">
+            <line x1="0" x2={W} y1={py(95)} y2={py(95)} class="line__target" />
+            <text x={W} y={py(95) - 5} text-anchor="end" class="line__label">TARGET 95%</text>
+            <line x1="0" x2={W} y1={H} y2={H} class="line__axis" />
+            <polyline points={pts(otifBefore)} class="line__path line__path--before" pathLength="1" />
+            <polyline points={pts(otifAfter)} class="line__path line__path--after" pathLength="1" />
+            <circle cx={px(11)} cy={py(otifBefore[11])} r="4.5" class="line__end line__end--before" />
+            <circle cx={px(11)} cy={py(otifAfter[11])} r="4.5" class="line__end line__end--after" />
+          </svg>
+          <p class="oc__stat">
+            <span class="is-before">Unpredictable: 69% to 84%</span>
+            <span class="is-after">Stable, above target: 96%</span>
+          </p>
+        </figure>
+      </li>
+
+      <!-- 3. Working capital -->
+      <li class="oc" data-reveal>
+        <div class="oc__head">
+          <h3>Release working capital</h3>
+          <p>Balance inventory availability with excess-stock reduction.</p>
+        </div>
+        <figure class="oc__fig">
+          <figcaption class="fig-note">Inventory value by stock health</figcaption>
+          <div class="seg" role="img" aria-label="Illustrative example. Before: healthy 58%, slow-moving 24%, excess 18%. After: healthy 76%, slow-moving 16%, excess 8%.">
+            <span class="seg__s seg__s--a" style={`--b:${stockBefore.healthy};--a:${stockAfter.healthy}`}></span>
+            <span class="seg__s seg__s--b" style={`--b:${stockBefore.slow};--a:${stockAfter.slow}`}></span>
+            <span class="seg__s seg__s--c" style={`--b:${stockBefore.excess};--a:${stockAfter.excess}`}></span>
+          </div>
+          <ul role="list" class="seg__legend">
+            <li><i class="sw sw--a"></i>Healthy</li>
+            <li><i class="sw sw--b"></i>Slow-moving</li>
+            <li><i class="sw sw--c"></i>Excess</li>
+          </ul>
+          <p class="oc__stat">
+            <span class="is-before">Excess stock: 18% of value</span>
+            <span class="is-after">Excess stock: 8% of value</span>
+          </p>
+        </figure>
+      </li>
+
+      <!-- 4. Risk -->
+      <li class="oc" data-reveal style="--d:1">
+        <div class="oc__head">
+          <h3>Make risk visible</h3>
+          <p>Prioritise critical suppliers, materials and mitigation actions.</p>
+        </div>
+        <figure class="oc__fig">
+          <figcaption class="fig-note">Key suppliers by likelihood × impact</figcaption>
+          <div class="risk" role="img" aria-label="Illustrative example. Before: seven key suppliers with no risk assessment. After: each placed by likelihood and impact, with three prioritised for mitigation.">
+            <div class="risk__grid">{Array.from({ length: 9 }).map((_, i) => <span style={`--s:${[4, 5, 6, 3, 4, 5, 2, 3, 4][i]}`} />)}</div>
+            {
+              riskDots.map((d, i) => (
+                <span
+                  class:list={['risk__dot', { 'is-hi': d.hi }]}
+                  style={`--bx:${14 + i * 12}%;--by:50%;--ax:${d.ax}%;--ay:${d.ay}%;--i:${i}`}
+                />
+              ))
+            }
+            <span class="risk__unknown">Risk not assessed</span>
+          </div>
+          <p class="oc__stat">
+            <span class="is-before">7 suppliers, no risk view</span>
+            <span class="is-after">3 prioritised for mitigation</span>
+          </p>
+        </figure>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<style>
+  .outcomes {
+    background: var(--navy-900);
+    overflow: clip;
+  }
+  .outcomes__bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 0% 0%, rgb(26 69 146 / 0.5), transparent 70%),
+      radial-gradient(ellipse 50% 40% at 100% 100%, rgb(39 155 72 / 0.14), transparent 70%);
+    pointer-events: none;
+  }
+  .outcomes__grid {
+    position: relative;
+    display: grid;
+    gap: clamp(48px, 6vw, 80px);
+  }
+  @media (min-width: 1080px) {
+    .outcomes__grid {
+      grid-template-columns: 0.8fr 1.2fr;
+      align-items: start;
+    }
+    .outcomes__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 40px);
+    }
+  }
+  .outcomes__intro h2 {
+    margin-top: 1.25rem;
+    font-size: var(--step-4);
+  }
+  .outcomes__intro h2 .accent {
+    color: var(--green-300);
+  }
+  .outcomes__lede {
+    margin-top: 1.5rem;
+    color: var(--on-dark-2);
+    font-size: var(--step-1);
+    max-width: 44ch;
+  }
+
+  /* Toggle */
+  .toggle {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 2.25rem;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid var(--line-dark-strong);
+  }
+  .toggle__btn {
+    position: relative;
+    z-index: 1;
+    min-width: 108px;
+    padding: 0.6rem 1.2rem;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    color: var(--on-dark-2);
+    font-size: 0.92rem;
+    font-weight: 560;
+    transition: color 0.3s;
+  }
+  .toggle__btn[aria-pressed='true'] {
+    color: var(--navy-900);
+  }
+  .toggle__thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc(50% - 4px);
+    border-radius: 999px;
+    background: var(--yellow);
+    transition: transform 0.5s var(--ease-out);
+  }
+  [data-state='after'] .toggle__thumb {
+    transform: translateX(100%);
+  }
+  .outcomes__disclaimer {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    max-width: 40ch;
+    font-size: 0.82rem;
+    line-height: 1.5;
+    color: var(--on-dark-3);
+  }
+  .outcomes__disclaimer :global(.icon) {
+    flex: none;
+    margin-top: 0.15rem;
+  }
+  .outcomes__cta {
+    margin-top: 2rem;
+  }
+
+  /* Cards */
+  .outcomes__cards {
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 700px) {
+    .outcomes__cards {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .oc {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.75rem;
+    padding: 1.6rem;
+    border-radius: var(--radius-lg);
+    background: rgb(255 255 255 / 0.04);
+    border: 1px solid var(--line-dark);
+    transition:
+      border-color 0.3s,
+      background-color 0.3s,
+      opacity 0.9s var(--ease-out),
+      transform 0.9s var(--ease-out);
+  }
+  .oc:hover {
+    border-color: var(--line-dark-strong);
+    background: rgb(255 255 255 / 0.06);
+  }
+  .oc__n {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--yellow);
+  }
+  .oc h3 {
+    margin-top: 0.6rem;
+    font-size: 1.28rem;
+    letter-spacing: -0.025em;
+  }
+  .oc__head p {
+    margin-top: 0.5rem;
+    font-size: 0.93rem;
+    color: var(--on-dark-2);
+    line-height: 1.55;
+  }
+  .oc__fig {
+    display: grid;
+    gap: 0.85rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .oc__stat {
+    position: relative;
+    height: 1.4em;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: #fff;
+  }
+  .oc__stat span {
+    position: absolute;
+    inset: 0;
+    transition:
+      opacity 0.5s,
+      transform 0.5s var(--ease-out);
+  }
+  [data-state='before'] .is-after,
+  [data-state='after'] .is-before {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+
+  /* 1. Columns */
+  .cols {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: end;
+    gap: 10px;
+    height: 104px;
+    border-bottom: 1px solid var(--line-dark-strong);
+  }
+  .cols__bar {
+    justify-self: center;
+    width: min(100%, 26px);
+    height: var(--a);
+    border-radius: 4px 4px 0 0;
+    background: var(--green-400);
+    transition:
+      height 1s var(--ease-in-out),
+      background-color 0.6s;
+  }
+  [data-state='before'] .cols__bar {
+    height: var(--b);
+    background: var(--navy-300);
+  }
+
+  /* 2. Line */
+  .line {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .line__axis {
+    stroke: var(--line-dark-strong);
+  }
+  .line__target {
+    stroke: rgb(255 255 255 / 0.4);
+  }
+  .line__label {
+    font-family: var(--font-mono);
+    font-size: 8.5px;
+    letter-spacing: 0.08em;
+    fill: var(--on-dark-3);
+  }
+  .line__path {
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    transition:
+      stroke-dashoffset 1.3s var(--ease-in-out),
+      opacity 0.6s;
+  }
+  .line__path--before {
+    stroke: var(--navy-300);
+  }
+  .line__path--after {
+    stroke: var(--green-400);
+  }
+  .line__end {
+    stroke: var(--navy-900);
+    stroke-width: 2;
+    transition: opacity 0.4s 0.9s;
+  }
+  .line__end--before {
+    fill: var(--navy-300);
+  }
+  .line__end--after {
+    fill: var(--green-400);
+  }
+  [data-state='after'] .line__path--before {
+    opacity: 0.22;
+  }
+  [data-state='before'] .line__path--after {
+    stroke-dashoffset: 1;
+  }
+  [data-state='before'] .line__end--after,
+  [data-state='after'] .line__end--before {
+    opacity: 0;
+    transition-delay: 0s;
+  }
+
+  /* 3. Segmented bar */
+  .seg {
+    display: flex;
+    gap: 2px;
+    height: 46px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .seg__s {
+    flex: 0 0 auto;
+    width: calc(var(--a) * 1%);
+    transition: width 1s var(--ease-in-out);
+  }
+  [data-state='before'] .seg__s {
+    width: calc(var(--b) * 1%);
+  }
+  .seg__s--a,
+  .sw--a {
+    background: var(--navy-300);
+  }
+  .seg__s--b,
+  .sw--b {
+    background: var(--green-400);
+  }
+  .seg__s--c,
+  .sw--c {
+    background: var(--yellow);
+  }
+  .seg__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+    font-size: 0.78rem;
+    color: var(--on-dark-2);
+  }
+  .seg__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .sw {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  /* 4. Risk */
+  .risk {
+    position: relative;
+    height: 104px;
+  }
+  .risk__grid {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    transition: opacity 0.6s;
+  }
+  .risk__grid span {
+    border-radius: 4px;
+    background: rgb(159 179 216 / calc((var(--s) - 1) * 0.06));
+  }
+  [data-state='before'] .risk__grid {
+    opacity: 0.15;
+  }
+  .risk__dot {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    margin: -6px 0 0 -6px;
+    border-radius: 999px;
+    background: var(--navy-200);
+    box-shadow: 0 0 0 2px var(--navy-900);
+    left: var(--ax);
+    top: var(--ay);
+    transition:
+      left 1s var(--ease-in-out),
+      top 1s var(--ease-in-out),
+      background-color 0.6s;
+    transition-delay: calc(var(--i) * 50ms);
+  }
+  .risk__dot.is-hi {
+    background: var(--yellow);
+  }
+  [data-state='before'] .risk__dot {
+    left: var(--bx);
+    top: var(--by);
+    background: var(--on-dark-3);
+  }
+  .risk__unknown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 10px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--on-dark-3);
+    opacity: 0;
+    transition: opacity 0.5s;
+  }
+  [data-state='before'] .risk__unknown {
+    opacity: 1;
+  }
+</style>

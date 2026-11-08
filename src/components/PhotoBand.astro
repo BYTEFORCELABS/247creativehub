@@ -1,0 +1,93 @@
+---
+/** Full-bleed photo band with a scroll-driven parallax (pure CSS, see animation-timeline). */
+import { Picture } from 'astro:assets';
+import Icon from './Icon.astro';
+import photo from '../assets/photos/inventory-scan.jpeg';
+---
+
+<section class="band on-dark" aria-labelledby="band-title">
+  <div class="band__media" aria-hidden="true">
+    <Picture
+      src={photo}
+      alt=""
+      formats={['avif', 'webp']}
+      widths={[800, 1253]}
+      sizes="100vw"
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
+  <div class="container band__inner">
+    <h2 id="band-title" class="band__title" data-reveal style="--d:1">
+      Procurement and supply chain support, sized for small and medium-sized businesses.
+    </h2>
+    <a href="#approach" class="text-link band__link" data-reveal style="--d:2">
+      See how a project runs <Icon name="arrow-right" size={16} />
+    </a>
+  </div>
+</section>
+
+<style>
+  .band {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: clamp(460px, 78vh, 720px);
+    padding-block: clamp(64px, 9vw, 112px);
+    overflow: clip;
+    background: var(--navy-900);
+  }
+  .band__media {
+    position: absolute;
+    inset: 0;
+  }
+  .band__media :global(picture),
+  .band__media :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .band__media :global(img) {
+    object-fit: cover;
+    object-position: center 35%;
+    transform: scale(1.12);
+  }
+  /* Navy wash: keeps white text readable over any part of the photo */
+  .band__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgb(2 12 36 / 0.88) 0%, rgb(3 26 72 / 0.6) 45%, rgb(3 26 72 / 0.15) 100%),
+      linear-gradient(0deg, rgb(2 12 36 / 0.7) 0%, transparent 55%);
+  }
+  .band__inner {
+    position: relative;
+  }
+  .band__title {
+    max-width: 19ch;
+    font-size: clamp(1.9rem, 1.1rem + 3.4vw, 4rem);
+    color: #fff;
+  }
+  .band__link {
+    margin-top: 1.75rem;
+  }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .band__media :global(img) {
+        animation: bandParallax linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 100%;
+      }
+    }
+  }
+  @keyframes bandParallax {
+    from {
+      transform: translateY(-9%) scale(1.2);
+    }
+    to {
+      transform: translateY(9%) scale(1.2);
+    }
+  }
+</style>

@@ -1,0 +1,312 @@
+---
+import { Picture } from 'astro:assets';
+import { processSteps } from '../data/site';
+import sessionPhoto from '../assets/photos/working-session.jpeg';
+---
+
+<section class="section process" id="approach" aria-labelledby="process-title">
+  <div class="container">
+    <header class="section-head section-head--split">
+      <div>
+        <p class="eyebrow" data-reveal>How we work</p>
+        <h2 id="process-title" data-reveal style="--d:1">How a project runs.</h2>
+      </div>
+      <p data-reveal style="--d:2">
+        Four stages, sized to the problem. Every stage ends with something your team can use straight away.
+      </p>
+    </header>
+
+    <figure class="process__photo">
+      <div class="process__frame">
+        <Picture
+          src={sessionPhoto}
+          alt="A small team discussing figures and reports around a meeting table"
+          formats={['avif', 'webp']}
+          widths={[640, 1000, 1400, 1900]}
+          sizes="(min-width: 1320px) 1240px, 94vw"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+      <figcaption>
+        <span class="process__chip">Step 1: Discover</span>
+        Understand the challenge, priorities and available data.
+      </figcaption>
+    </figure>
+
+    <ol role="list" class="steps" data-process style="--p:0">
+      <li class="steps__track" aria-hidden="true"><span class="steps__fill"></span></li>
+      {
+        processSteps.map((s, i) => (
+          <li class="step" data-step style={`--i:${i}`}>
+            <span class="step__node" aria-hidden="true">
+              <span>{s.n}</span>
+            </span>
+            <div class="step__card">
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+              <div class="step__out">
+                <span class="step__out-label">You get</span>
+                <p>{s.output}</p>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .process {
+    background: var(--cream);
+  }
+  .process .section-head h2 {
+    color: var(--navy-900);
+  }
+  .process .section-head h2 .accent {
+    color: var(--green-700);
+  }
+
+  /* Wide photo: opens from an inset window and settles from a zoom as it scrolls in */
+  .process__photo {
+    position: relative;
+    margin-bottom: clamp(48px, 6vw, 80px);
+  }
+  .process__frame {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--stone-100);
+  }
+  @media (min-width: 720px) {
+    .process__frame {
+      aspect-ratio: 21 / 9;
+    }
+  }
+  .process__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 30%;
+  }
+  .process__photo figcaption {
+    position: absolute;
+    left: clamp(1rem, 2.5vw, 2rem);
+    bottom: clamp(1rem, 2.5vw, 2rem);
+    right: clamp(1rem, 2.5vw, 2rem);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem 0.9rem;
+    max-width: 560px;
+    padding: 0.85rem 1.1rem;
+    border-radius: 14px;
+    background: rgb(255 255 255 / 0.9);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: var(--shadow);
+    font-size: 0.95rem;
+    color: var(--ink-2);
+  }
+  @media (max-width: 719px) {
+    .process__photo figcaption {
+      position: static;
+      margin-top: 0.75rem;
+      box-shadow: none;
+      background: var(--paper);
+      border: 1px solid var(--line);
+    }
+  }
+  .process__chip {
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: var(--navy-800);
+    color: var(--yellow);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+  }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .process__frame {
+        animation: frameOpen linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 45%;
+      }
+      .process__frame :global(img) {
+        animation: imgSettle linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 60%;
+      }
+    }
+  }
+  @keyframes frameOpen {
+    from {
+      clip-path: inset(10% 9% round 28px);
+    }
+    to {
+      clip-path: inset(0 round 22px);
+    }
+  }
+  @keyframes imgSettle {
+    from {
+      transform: scale(1.22);
+    }
+    to {
+      transform: scale(1);
+    }
+  }
+
+  .steps {
+    position: relative;
+    display: grid;
+    gap: 1.25rem;
+    padding-left: 64px;
+  }
+  .steps__track {
+    position: absolute;
+    left: 23px;
+    top: 24px;
+    bottom: 24px;
+    width: 2px;
+    background: var(--stone-200);
+    border-radius: 2px;
+  }
+  .steps__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--green-600);
+    border-radius: 2px;
+    transform-origin: top;
+    transform: scaleY(var(--p));
+  }
+  .step {
+    position: relative;
+  }
+  @media (max-width: 400px) {
+    .steps {
+      padding-left: 52px;
+    }
+    .steps__track {
+      left: 19px;
+    }
+    .step__node {
+      left: -52px;
+      width: 40px;
+      height: 40px;
+    }
+    .step__card {
+      padding: 1.25rem;
+    }
+  }
+  .step__node {
+    position: absolute;
+    left: -64px;
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    background: var(--cream);
+    border: 2px solid var(--stone-200);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--muted);
+    transition:
+      background-color 0.4s,
+      border-color 0.4s,
+      color 0.4s,
+      transform 0.5s var(--ease-out);
+  }
+  .step.is-active .step__node {
+    background: var(--navy-800);
+    border-color: var(--navy-800);
+    color: var(--yellow);
+  }
+  .step.is-current .step__node {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 6px rgb(39 155 72 / 0.15);
+  }
+  .step__card {
+    padding: 1.5rem;
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    transition:
+      border-color 0.4s,
+      box-shadow 0.4s,
+      opacity 0.5s;
+  }
+  .js .step:not(.is-active) .step__card {
+    opacity: 0.6;
+  }
+  .step.is-current .step__card {
+    border-color: var(--line-strong);
+    box-shadow: var(--shadow);
+  }
+  .step h3 {
+    font-size: 1.45rem;
+    letter-spacing: -0.03em;
+    color: var(--navy-900);
+  }
+  .step__card > p {
+    margin-top: 0.5rem;
+    color: var(--muted);
+    font-size: 0.97rem;
+  }
+  .step__out {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+  }
+  .step__out-label {
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--green-700);
+  }
+  .step__out p {
+    margin-top: 0.35rem;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+
+  /* Horizontal timeline on wide screens */
+  @media (min-width: 960px) {
+    .steps {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      padding-left: 0;
+      padding-top: 80px;
+    }
+    .steps__track {
+      left: 24px;
+      right: calc(25% - 24px);
+      top: 23px;
+      bottom: auto;
+      width: auto;
+      height: 2px;
+    }
+    .steps__fill {
+      transform-origin: left;
+      transform: scaleX(var(--p));
+    }
+    .step__node {
+      left: 0;
+      top: -80px;
+    }
+    .step__card {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .step__out {
+      margin-top: auto;
+    }
+    .step__card > p {
+      margin-bottom: 1.25rem;
+    }
+  }
+</style>

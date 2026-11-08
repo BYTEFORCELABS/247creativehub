@@ -1,0 +1,466 @@
+---
+/**
+ * Interactive "connected supply" card: four lenses (Spend, Supply, Stock, Risk), each
+ * with an illustrative mini-chart. All figures are illustrative, not client data.
+ */
+import Icon from './Icon.astro';
+
+const lenses = [
+  { id: 'spend', label: 'Spend', verb: 'See opportunity' },
+  { id: 'supply', label: 'Supply', verb: 'Improve reliability' },
+  { id: 'stock', label: 'Stock', verb: 'Release cash' },
+  { id: 'risk', label: 'Risk', verb: 'Protect continuity' },
+] as const;
+
+const spend = [
+  { k: 'Raw materials', v: 34 },
+  { k: 'Packaging', v: 18 },
+  { k: 'Freight', v: 15 },
+  { k: 'Facilities', v: 11 },
+  { k: 'Services', v: 9 },
+  { k: 'Other', v: 13 },
+].sort((a, b) => b.v - a.v);
+const spendMax = Math.max(...spend.map((d) => d.v));
+
+const otif = [
+  { k: 'Supplier A', v: 97 },
+  { k: 'Supplier B', v: 93 },
+  { k: 'Supplier C', v: 78 },
+  { k: 'Supplier D', v: 96 },
+  { k: 'Supplier E', v: 86 },
+];
+const otifTarget = 95;
+const otifMin = 60;
+
+const stock = [
+  { k: 'Healthy', v: 58, cls: 'a' },
+  { k: 'Slow-moving', v: 24, cls: 'b' },
+  { k: 'Excess', v: 18, cls: 'c' },
+];
+
+// Risk matrix: likelihood (x 1-3) × impact (y 1-3)
+const risks = [
+  { x: 3, y: 3, k: 'Single-source component' },
+  { x: 2, y: 3, k: 'Overseas packaging supplier' },
+  { x: 3, y: 2, k: 'Volatile freight lane' },
+  { x: 1, y: 3, k: 'Specialist sub-contractor' },
+  { x: 2, y: 1, k: 'Office consumables' },
+  { x: 1, y: 2, k: 'Secondary raw material' },
+  { x: 1, y: 1, k: 'Cleaning services' },
+];
+const cellRisk = (x: number, y: number) => x + y; // 2..6 → shade step
+---
+
+<div class="intel on-dark" data-intel>
+  <div class="intel__panel">
+    <div class="intel__panel-head">
+      <span class="fig-note">Connected supply view</span>
+      <span class="tag">Illustrative data</span>
+    </div>
+
+    <div class="intel__tabs" role="tablist" aria-label="Supply chain lenses">
+      {
+        lenses.map((l, i) => (
+          <button
+            type="button"
+            role="tab"
+            id={`lens-tab-${l.id}`}
+            class="tab"
+            aria-selected={i === 0 ? 'true' : 'false'}
+            aria-controls={`lens-${l.id}`}
+            tabindex={i === 0 ? 0 : -1}
+            data-lens={l.id}
+            title={l.verb}
+          >
+            <span class="tab__dot" aria-hidden="true" />
+            {l.label}
+          </button>
+        ))
+      }
+    </div>
+
+    <!-- Spend -->
+    <section class="lens" id="lens-spend" role="tabpanel" aria-labelledby="lens-tab-spend" data-panel="spend">
+      <p class="lens__q">Where is money leaking?</p>
+      <div class="hbars" role="img" aria-label="Illustrative spend by category: raw materials 34%, packaging 18%, freight 15%, other 13%, facilities 11%, services 9%. The top three categories hold 67% of spend.">
+        {
+          spend.map((d, i) => (
+            <div class:list={['hbar', { 'is-focus': i < 3 }]}>
+              <span class="hbar__k">{d.k}</span>
+              <span class="hbar__track">
+                <span class="hbar__fill" style={`--w:${(d.v / spendMax) * 100}%`} />
+              </span>
+              <span class="hbar__v">{d.v}%</span>
+            </div>
+          ))
+        }
+      </div>
+      <p class="lens__insight"><Icon name="arrow-right" size={15} /> Three categories make up two-thirds of spend. That’s where to look first.</p>
+    </section>
+
+    <!-- Supply -->
+    <section class="lens" id="lens-supply" role="tabpanel" aria-labelledby="lens-tab-supply" data-panel="supply" hidden>
+      <p class="lens__q">Which suppliers are letting you down?</p>
+      <div class="hbars hbars--target" style={`--t:${((otifTarget - otifMin) / (100 - otifMin)) * 100}%`} role="img" aria-label={`Illustrative on-time-in-full by supplier against a ${otifTarget}% target. Suppliers C (78%), E (86%) and B (93%) are below target.`}>
+        {
+          otif.map((d) => (
+            <div class:list={['hbar', { 'is-focus': d.v < otifTarget }]}>
+              <span class="hbar__k">{d.k}</span>
+              <span class="hbar__track">
+                <span class="hbar__fill" style={`--w:${((d.v - otifMin) / (100 - otifMin)) * 100}%`} />
+              </span>
+              <span class="hbar__v">{d.v}%</span>
+            </div>
+          ))
+        }
+        <span class="hbars__target-label">Target {otifTarget}%</span>
+      </div>
+      <p class="lens__insight"><Icon name="arrow-right" size={15} /> A simple OTIF scorecard turns “they’re always late” into evidence.</p>
+    </section>
+
+    <!-- Stock -->
+    <section class="lens" id="lens-stock" role="tabpanel" aria-labelledby="lens-tab-stock" data-panel="stock" hidden>
+      <p class="lens__q">How much cash is sitting on the shelf?</p>
+      <div class="segbar" role="img" aria-label="Illustrative inventory value split: healthy 58%, slow-moving 24%, excess 18%.">
+        <div class="segbar__bar">
+          {stock.map((d) => <span class={`segbar__seg segbar__seg--${d.cls}`} style={`--w:${d.v}%`} />)}
+        </div>
+        <ul class="segbar__legend" role="list">
+          {
+            stock.map((d) => (
+              <li>
+                <i class={`sw sw--${d.cls}`} />
+                <span>{d.k}</span>
+                <strong>{d.v}%</strong>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <p class="lens__insight"><Icon name="arrow-right" size={15} /> Separating slow-moving and excess stock shows what can be released safely.</p>
+    </section>
+
+    <!-- Risk -->
+    <section class="lens" id="lens-risk" role="tabpanel" aria-labelledby="lens-tab-risk" data-panel="risk" hidden>
+      <p class="lens__q">What would stop you trading tomorrow?</p>
+      <div class="matrix-wrap" role="img" aria-label="Illustrative risk matrix plotting seven suppliers and materials by likelihood and impact. A single-source component sits in the highest-risk cell.">
+        <span class="matrix__y">Impact</span>
+        <div class="matrix">
+          {
+            [3, 2, 1].map((y) =>
+              [1, 2, 3].map((x) => (
+                <div class="matrix__cell" style={`--s:${cellRisk(x, y)}`}>
+                  {risks
+                    .filter((r) => r.x === x && r.y === y)
+                    .map((r) => (
+                      <span class:list={['matrix__dot', { 'is-focus': x + y >= 5 }]} title={r.k} />
+                    ))}
+                </div>
+              )),
+            )
+          }
+        </div>
+        <span class="matrix__x">Likelihood</span>
+      </div>
+      <p class="lens__insight"><Icon name="arrow-right" size={15} /> Plotting suppliers by likelihood and impact turns worry into a priority list.</p>
+    </section>
+  </div>
+</div>
+
+<style>
+  .intel {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+  }
+
+  /* ---- Panel ---- */
+  .intel__panel {
+    position: relative;
+    padding: 1.15rem 1.25rem 1.25rem;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(180deg, rgb(3 26 72 / 0.72), rgb(2 12 36 / 0.78));
+    border: 1px solid var(--line-dark-strong);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    backdrop-filter: blur(18px) saturate(140%);
+    box-shadow: 0 30px 70px -30px rgb(0 0 0 / 0.75);
+  }
+
+  /* ---- Lens tabs ---- */
+  .intel__tabs {
+    display: grid;
+    /* minmax(0, 1fr) lets the tabs shrink instead of widening the whole hero */
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 4px;
+    padding: 4px;
+    margin-bottom: 1.1rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid var(--line-dark);
+  }
+  .tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    min-height: 36px;
+    padding: 0 0.5rem;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--on-dark-2);
+    font-size: 0.86rem;
+    font-weight: 560;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+  .tab:hover {
+    color: #fff;
+  }
+  .tab[aria-selected='true'] {
+    background: var(--paper);
+    color: var(--navy-900);
+  }
+  .tab__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--yellow);
+    transition: background-color 0.3s;
+  }
+  .tab[aria-selected='true'] .tab__dot {
+    background: var(--green-600);
+  }
+  @media (max-width: 380px) {
+    .tab {
+      padding: 0 0.25rem;
+      font-size: 0.8rem;
+    }
+    .tab__dot {
+      display: none;
+    }
+  }
+  .intel__panel-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .lens {
+    animation: lensIn 0.55s var(--ease-out) both;
+  }
+  .lens[hidden] {
+    display: none;
+  }
+  .lens__q {
+    font-size: 1.12rem;
+    font-weight: 560;
+    letter-spacing: -0.02em;
+    margin-bottom: 1rem;
+  }
+  .lens__insight {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 0.9rem;
+    border-top: 1px solid var(--line-dark);
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: var(--on-dark-2);
+  }
+  .lens__insight :global(.icon) {
+    flex: none;
+    margin-top: 0.2rem;
+    color: var(--green-400);
+  }
+  @keyframes lensIn {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+  }
+
+  /* Horizontal bars */
+  .hbars {
+    position: relative;
+    display: grid;
+    gap: 0.45rem;
+  }
+  .hbar {
+    display: grid;
+    grid-template-columns: 6.6rem 1fr 2.6rem;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.78rem;
+  }
+  .hbar__k {
+    color: var(--on-dark-2);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .hbar__v {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    color: var(--on-dark-3);
+    text-align: right;
+  }
+  .hbar.is-focus .hbar__v,
+  .hbar.is-focus .hbar__k {
+    color: #fff;
+  }
+  .hbar__track {
+    position: relative;
+    height: 10px;
+  }
+  .hbar__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: var(--w);
+    border-radius: 0 4px 4px 0;
+    background: rgb(159 179 216 / 0.38);
+    transform-origin: left;
+    animation: grow 0.9s var(--ease-out) both;
+  }
+  .hbar.is-focus .hbar__fill {
+    background: var(--green-400);
+  }
+  .hbars--target .hbar.is-focus .hbar__fill {
+    background: var(--yellow);
+  }
+  /* target rule: one tick per row, joined across the row gaps */
+  .hbars--target .hbar__track::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    bottom: -7px;
+    left: var(--t);
+    width: 1px;
+    background: rgb(255 255 255 / 0.6);
+  }
+  .hbars__target-label {
+    justify-self: end;
+    font-family: var(--font-mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--on-dark-3);
+  }
+  @keyframes grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+
+  /* Segmented bar */
+  .segbar__bar {
+    display: flex;
+    gap: 2px;
+    height: 46px;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .segbar__seg {
+    width: var(--w);
+    transform-origin: left;
+    animation: grow 0.9s var(--ease-out) both;
+  }
+  .segbar__seg--a,
+  .sw--a {
+    background: rgb(159 179 216 / 0.38);
+  }
+  .segbar__seg--b,
+  .sw--b {
+    background: var(--green-400);
+  }
+  .segbar__seg--c,
+  .sw--c {
+    background: var(--yellow);
+  }
+  .segbar__legend {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: start;
+    gap: 0.5rem 1.4rem;
+    margin-top: 0.9rem;
+    font-size: 0.8rem;
+    color: var(--on-dark-2);
+  }
+  .segbar__legend li {
+    display: grid;
+    grid-template-columns: auto auto;
+    align-items: center;
+    column-gap: 0.45rem;
+  }
+  .segbar__legend strong {
+    grid-column: 2;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: #fff;
+  }
+  .sw {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+
+  /* Risk matrix */
+  .matrix-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 0.4rem 0.6rem;
+  }
+  .matrix__y {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+  }
+  .matrix__x {
+    grid-column: 2;
+    text-align: center;
+  }
+  .matrix__x,
+  .matrix__y {
+    font-family: var(--font-mono);
+    font-size: 0.64rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--on-dark-3);
+  }
+  .matrix {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .matrix__cell {
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    gap: 5px;
+    height: 34px;
+    border-radius: 4px;
+    /* one hue, light → dark as risk rises */
+    background: rgb(159 179 216 / calc((var(--s) - 1) * 0.06));
+  }
+  .matrix__dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    background: var(--navy-200);
+    box-shadow: 0 0 0 2px var(--navy-900);
+    animation: pop 0.5s var(--ease-out) both;
+  }
+  .matrix__dot.is-focus {
+    background: var(--yellow);
+  }
+  @keyframes pop {
+    from {
+      transform: scale(0);
+    }
+  }
+</style>
